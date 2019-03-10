@@ -1,3 +1,9 @@
 import store from './store';
 
-alert(`Hello ${store.getters.foo}!`);
+browser.browserAction.onClicked.addListener((activeTab) => {
+  browser.runtime.openOptionsPage();
+});
+
+browser.commands.onCommand.addListener((command) => {
+  browser.runtime.openOptionsPage();
+});
