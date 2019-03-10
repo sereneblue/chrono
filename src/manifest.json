@@ -16,7 +16,7 @@
     ]
   },
   "options_ui": {
-    "page": "options/options.html",
-    "chrome_style": true
+    "page": "dashboard.html",
+    "open_in_tab": true
   }
 }
