@@ -1,6 +1,12 @@
 {
   "name": "chrono",
   "description": "Browser history visualizer",
+  "applications": {
+    "gecko": {
+      "id": "{4f1f10c5-0ff4-4c63-bf59-c307c94dc552}",
+      "strict_min_version": "54"
+    }
+  },
   "version": "0.0.1",
   "manifest_version": 2,
   "icons": {
@@ -8,7 +14,8 @@
     "128": "icons/icon_128.png"
   },
   "browser_action": {
-    "default_title": "chrono"
+    "default_title": "chrono",
+    "default_area": "tabstrip"
   },
   "background": {
     "scripts": [
