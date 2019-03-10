@@ -18,5 +18,12 @@
   "options_ui": {
     "page": "dashboard.html",
     "open_in_tab": true
+  },
+  "commands":{
+    "openOptionsPage": {
+        "suggested_key": {
+            "default": "Ctrl+Alt+H"
+        }
+    }
   }
 }
