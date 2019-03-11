@@ -52,7 +52,7 @@ const config = {
         },
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf)$/,
         loader: 'file-loader?name=fonts/[name].[ext]'
       }
     ],
