@@ -51,6 +51,10 @@ const config = {
           name: '[name].[ext]?emitFile=false',
         },
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        loader: 'file-loader?name=fonts/[name].[ext]'
+      }
     ],
   },
   plugins: [
