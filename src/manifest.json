@@ -26,6 +26,7 @@
     "page": "dashboard.html",
     "open_in_tab": true
   },
+  "permissions": ["history"],
   "commands":{
     "openOptionsPage": {
         "suggested_key": {
