@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "chart.js": "^2.7.3",
-    "dayjs": "^1.8.10",
     "material-design-icons-iconfont": "^4.0.5",
     "typeface-roboto": "0.0.54",
     "vue": "^2.5.17",
