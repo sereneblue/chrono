@@ -29,7 +29,7 @@
 
       <v-tab-item key="stats">
         <v-container fluid>
-          2
+          <StatsView />
         </v-container>
       </v-tab-item>
 
@@ -43,8 +43,13 @@
 </template>
 
 <script>
+import StatsView from './stats/StatsView.vue';
+
 export default {
   name: 'App',
+  components: {
+    StatsView
+  }
 };
 </script>
 
