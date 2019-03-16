@@ -11,6 +11,8 @@ export default {
   },
   data() {
     return {
+      dayOfWeek: [0, 0, 0, 0, 0, 0, 0],
+      timeOfDay: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       topDomains: [],
       visits: []
     }
@@ -29,6 +31,7 @@ export default {
 
       let index = visits.length - 1;
       let domains = {};
+      let visitTime = null;
 
       for (var i = 0; i <= duration; i++) {
         count = 0;
@@ -41,6 +44,11 @@ export default {
           } else {
             domains[domain] = 1;
           }
+
+          // get day of week & time of day
+          visitTime = moment(visits[index].lastVisitTime);
+          this.dayOfWeek[visitTime.day()]++;
+          this.timeOfDay[visitTime.hour()]++;
 
           // get visit count
           if (d.startOf('day').valueOf() > visits[index].lastVisitTime) {
