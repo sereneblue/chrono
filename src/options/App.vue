@@ -1,9 +1,9 @@
 <template>
-  <v-app v-if="loaded" dark>
+  <v-app v-if="loaded" :dark="darkModeEnabled">
     <v-tabs
       centered
       :color="theme"
-      slider-color="white"
+      :slider-color="darkModeEnabled ? 'white' : 'black'"
     >
       <v-tab key="history">
         <v-icon left small>history</v-icon>
@@ -52,6 +52,9 @@ export default {
     SettingsView
   },
   computed: {
+    darkModeEnabled() {
+      return this.$store.state.darkModeEnabled;
+    },
     loaded() {
       return this.$store.state.loaded;
     },
