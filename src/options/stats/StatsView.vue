@@ -36,7 +36,7 @@
       </v-flex>
       <v-flex xs6>
         <v-card>
-          <v-subheader>Time of Day</v-subheader>
+          <v-subheader>Time of Day (hour)</v-subheader>
           <TimeOfDayTrend :data="timeOfDay" />
         </v-card>
       </v-flex>
