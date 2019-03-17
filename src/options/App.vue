@@ -1,9 +1,8 @@
 <template>
-  <v-app dark>
+  <v-app v-if="loaded" dark>
     <v-tabs
       centered
-      color="indigo"
-      dark
+      :color="theme"
       slider-color="white"
     >
       <v-tab key="history">
@@ -35,7 +34,7 @@
 
       <v-tab-item key="settings">
         <v-container fluid>
-          3
+          <SettingsView />
         </v-container>
       </v-tab-item>
     </v-tabs>
@@ -44,11 +43,24 @@
 
 <script>
 import StatsView from './stats/StatsView.vue';
+import SettingsView from './settings/SettingsView.vue';
 
 export default {
   name: 'App',
   components: {
-    StatsView
+    StatsView,
+    SettingsView
+  },
+  computed: {
+    loaded() {
+      return this.$store.state.loaded;
+    },
+    theme() {
+      return this.$store.state.themeColor;
+    }
+  },
+  created() {
+    this.$store.dispatch('updateSettings');
   }
 };
 </script>
