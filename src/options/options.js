@@ -6,6 +6,7 @@ import Chart from 'chart.js';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'typeface-roboto';
+import store from '../store';
 
 Vue.use(Vuetify);
 
@@ -13,4 +14,5 @@ Vue.use(Vuetify);
 new Vue({
   el: '#app',
   render: h => h(App),
+  store
 });
