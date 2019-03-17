@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import colors from 'vuetify/es5/util/colors';
+
 export default {
   name: 'DayOfWeekTrend',
   props: ['data'],
@@ -17,19 +19,41 @@ export default {
           labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
           datasets: [{
             data: this.data,
-            backgroundColor: 'red'
+            backgroundColor: colors.indigo.base,
+            borderColor: colors.indigo.darken3,
+            borderWidth: 3,
+            hoverBackgroundColor: colors.indigo.lighten1,
+            hoverBorderColor: colors.indigo.darken3
           }]
         },
         options: {
           legend: {
-            display: false
+            display: false,
+            labels: {
+              fontColor: 'white'
+            }
           },
           maintainAspectRatio: false,
           scales: {
+            xAxes: [{
+              gridLines: {
+                color: "rgba(255, 255, 255, 0.2)"
+              },
+              ticks: {
+                fontColor:'white'
+              }
+            }],
             yAxes: [{
+              gridLines: {
+                color: "rgba(255, 255, 255, 0.2)"
+              },
               scaleLabel: {
                 display: true,
+                fontColor:'white',
                 labelString: 'visits'
+              },
+              ticks: {
+                fontColor:'white'
               }
             }]
           }

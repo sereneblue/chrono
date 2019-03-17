@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import colors from 'vuetify/es5/util/colors';
+
 export default {
   name: 'VisitsTrend',
   props: ['data'],
@@ -19,14 +21,15 @@ export default {
         data: {
           labels: labels,
           datasets: [{
-            backgroundColor: 'red',
-            borderColor: 'red',
             data: dataset,
             type: 'line',
             pointRadius: 2,
-            fill: true,
-            lineTension: 0,
-            borderWidth: 2
+            backgroundColor: colors.indigo.base,
+            borderColor: colors.indigo.darken3,
+            borderWidth: 2,
+            hoverBackgroundColor: colors.indigo.lighten1,
+            hoverBorderColor: colors.indigo.darken3,
+            fill: true
           }]
         },
         options: {
@@ -38,6 +41,12 @@ export default {
             xAxes: [{
               type: 'time',
               position: 'bottom',
+              gridLines: {
+                color: "rgba(255, 255, 255, 0.2)"
+              },
+              ticks: {
+                fontColor:'white'
+              },
               time: {
                 displayFormats: {
                   month: 'MMM YYYY'
@@ -47,9 +56,16 @@ export default {
               }
             }],
             yAxes: [{
+              gridLines: {
+                color: "rgba(255, 255, 255, 0.2)"
+              },
               scaleLabel: {
                 display: true,
+                fontColor:'white',
                 labelString: 'visits'
+              },
+              ticks: {
+                fontColor:'white'
               }
             }]
           }

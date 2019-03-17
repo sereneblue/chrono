@@ -48,6 +48,7 @@
 import VisitsTrend from './components/VisitsTrend.vue';
 import DayOfWeekTrend from './components/DayOfWeekTrend.vue';
 import TimeOfDayTrend from './components/TimeOfDayTrend.vue';
+import colors from 'vuetify/es5/util/colors';
 
 var moment = require('moment');
 
