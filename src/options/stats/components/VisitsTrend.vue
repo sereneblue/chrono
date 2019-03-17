@@ -116,6 +116,7 @@ export default {
 
         this.chart.options.scales.xAxes[0].gridLines.color = this.color.grid;
         this.chart.options.scales.xAxes[0].ticks.minor.fontColor = this.color.font;
+        this.chart.options.scales.xAxes[0].ticks.major.fontColor = this.color.font;
         this.chart.options.scales.yAxes[0].gridLines.color = this.color.grid;
         this.chart.options.scales.yAxes[0].ticks.minor.fontColor = this.color.font;
         this.chart.options.scales.yAxes[0].scaleLabel.fontColor = this.color.font;
