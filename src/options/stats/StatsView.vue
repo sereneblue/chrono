@@ -19,7 +19,7 @@
       </v-flex>
       <v-flex lg8>
         <v-card min-height="100%">
-          <v-subheader>Browsing History Trend</v-subheader>
+          <v-subheader>Browsing History (Past 3 Months)</v-subheader>
           <VisitsTrend :data="visits"/>
         </v-card>
       </v-flex>
