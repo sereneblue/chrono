@@ -5,10 +5,7 @@
         <v-card>
           <v-list subheader>
             <v-subheader>Top Domains</v-subheader>
-            <v-list-tile
-              v-for="domain in topDomains"
-              :key="domain[0]"
-            >
+            <v-list-tile v-for="domain in topDomains">
               <v-list-tile-content>
                 <v-list-tile-title>{{ domain[0] }} </v-list-tile-title>
               </v-list-tile-content>
@@ -91,19 +88,6 @@ export default {
         count = 0;
 
         while (index > -1) {
-          // get top domain
-          let domain = new URL(visits[index].url).hostname;
-          if (domain && domains[domain]) {
-            domains[domain]++;
-          } else {
-            domains[domain] = 1;
-          }
-
-          // get day of week & time of day
-          visitTime = moment(visits[index].lastVisitTime);
-          dow[visitTime.day()]++;
-          tod[visitTime.hour()]++;
-
           // get visit count
           if (d.startOf('day').valueOf() > visits[index].lastVisitTime) {
             index--;
@@ -111,6 +95,19 @@ export default {
           }
 
           if (visits[index].lastVisitTime <= d.endOf('day').valueOf()) {
+            // get top domain
+            let domain = new URL(visits[index].url).hostname;
+            if (domain && domains[domain]) {
+              domains[domain]++;
+            } else {
+              domains[domain] = 1;
+            }
+
+            // get day of week & time of day
+            visitTime = moment(visits[index].lastVisitTime);
+            dow[visitTime.day()]++;
+            tod[visitTime.hour()]++;
+
             index--;
             count++;
           } else {
