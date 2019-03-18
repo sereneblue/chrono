@@ -3,7 +3,7 @@
     <v-select
       :items="views"
       :value="currentView"
-      @change="changeMainView"
+      @change="updateMainView"
       label="Main view"
     >
       <template slot="item" slot-scope="data">
@@ -81,9 +81,6 @@ export default {
     } 
   },
   methods: {
-    changeMainView(view) {
-      this.$store.dispatch('changeView', view);
-    },
     changeThemeColor(theme) {
       this.$store.dispatch('changeTheme', theme);
     },
@@ -94,6 +91,9 @@ export default {
       }
 
       return colors[c].base;
+    },
+    updateMainView(view) {
+      this.$store.dispatch('updateView', view);
     }
   }
 };

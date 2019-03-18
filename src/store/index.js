@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+  	activeTab: 'history',
     darkModeEnabled: true,
     mainView: 'history',
     loaded: false,

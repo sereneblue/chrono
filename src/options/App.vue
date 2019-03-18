@@ -1,7 +1,9 @@
 <template>
   <v-app v-if="loaded" :dark="darkModeEnabled">
     <v-tabs
+      v-model="activeTab"
       centered
+      fixed-tabs
       :color="theme"
       :slider-color="darkModeEnabled ? 'white' : 'black'"
     >
@@ -51,7 +53,18 @@ export default {
     StatsView,
     SettingsView
   },
+  created() {
+    this.$store.dispatch('updateSettings');
+  },
   computed: {
+    activeTab: {
+      get() {
+        return this.$store.state.activeTab == 'history' ? 0 : 1;
+      },
+      set() {
+        // do nothing
+      }
+    },
     darkModeEnabled() {
       return this.$store.state.darkModeEnabled;
     },
@@ -61,9 +74,6 @@ export default {
     theme() {
       return this.$store.state.themeColor;
     }
-  },
-  created() {
-    this.$store.dispatch('updateSettings');
   }
 };
 </script>
