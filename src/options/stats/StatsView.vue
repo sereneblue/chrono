@@ -13,7 +13,7 @@
                 <v-list-tile-title>{{ domain[0] }} </v-list-tile-title>
               </v-list-tile-content>
 
-              <v-list-tile-action>
+              <v-list-tile-action v-if="domain[1]">
                 <v-chip label>{{ domain[1] }} visits</v-chip>
               </v-list-tile-action>
             </v-list-tile>
@@ -129,6 +129,11 @@ export default {
 
       domainList.sort((a, b) => { return b[1] - a[1]});
       this.topDomains = domainList.slice(0, 10);
+      if (domainList.length < 10) {
+        for (var i = domainList.length - 1; i < 10; i++) {
+          this.topDomains.push(["", 0]);
+        }
+      }
       this.dayOfWeek = dow;
       this.timeOfDay = tod;
     }
