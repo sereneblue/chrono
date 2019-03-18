@@ -87,12 +87,14 @@ export default {
       });
     }
   },
-  mounted() {
-    this.renderChart();
-  },
   watch: {
+    data: {
+      handler() {
+        this.renderChart();
+      }
+    },
     darkModeEnabled: {
-      handler(val, oldVal) {
+      handler() {
         // can't set ticks.fontColor directly
         // need to use minor.fontColor
         // https://github.com/chartjs/Chart.js/issues/5105
@@ -106,7 +108,7 @@ export default {
       }
     },
     themeColor: {
-      handler(val, oldVal) {
+      handler() {
         this.chart.data.datasets[0].backgroundColor = colors[this.themeColor].base;
         this.chart.data.datasets[0].borderColor = colors[this.themeColor].darken3;
         this.chart.data.datasets[0].hoverBackgroundColor = colors[this.themeColor].lighten1;

@@ -63,8 +63,8 @@ export default {
   },
   data() {
     return {
-      dayOfWeek: [0, 0, 0, 0, 0, 0, 0],
-      timeOfDay: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      dayOfWeek: [],
+      timeOfDay: [],
       topDomains: [],
       visits: []
     }
@@ -73,6 +73,8 @@ export default {
     async calculateStats(duration) {
       let d = moment().subtract(duration, 'day').startOf('day');
       let count;
+      let dow = [0, 0, 0, 0, 0, 0, 0];
+      let tod = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
       let visits = await browser.history.search({
         text: "",
@@ -99,8 +101,8 @@ export default {
 
           // get day of week & time of day
           visitTime = moment(visits[index].lastVisitTime);
-          this.dayOfWeek[visitTime.day()]++;
-          this.timeOfDay[visitTime.hour()]++;
+          dow[visitTime.day()]++;
+          tod[visitTime.hour()]++;
 
           // get visit count
           if (d.startOf('day').valueOf() > visits[index].lastVisitTime) {
@@ -127,6 +129,8 @@ export default {
 
       domainList.sort((a, b) => { return b[1] - a[1]});
       this.topDomains = domainList.slice(0, 10);
+      this.dayOfWeek = dow;
+      this.timeOfDay = tod;
     }
   }
 };
