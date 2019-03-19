@@ -12,6 +12,7 @@ export default new Vuex.Store({
     darkModeEnabled: true,
     mainView: 'history',
     loaded: false,
+    statsRange: '3m',
     themeColor: 'indigo'
   },
   mutations,

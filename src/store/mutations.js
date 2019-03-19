@@ -10,6 +10,9 @@ export default {
   [types.TOGGLE_DARK_MODE](state, payload) {
     state.darkModeEnabled = payload;
   },
+  [types.UPDATE_RANGE](state, payload) {
+    state.statsRange = payload;
+  },
   [types.UPDATE_TAB](state, payload) {
     state.activeTab = payload;
   },

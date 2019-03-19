@@ -10,6 +10,11 @@ export const toggleDarkMode = ({ commit }, payload) => {
   browser.storage.local.set({'darkModeEnabled': payload });
 };
 
+export const updateRange = ({ commit }, payload) => {
+  commit(types.UPDATE_RANGE, payload);
+  browser.storage.local.set({'statsRange': payload });
+};
+
 export const updateSettings = async ({ commit }) => {  
   let settings = await browser.storage.local.get();
 
@@ -18,6 +23,7 @@ export const updateSettings = async ({ commit }) => {
     commit(types.UPDATE_VIEW, settings.mainView);
   }
   if (settings.hasOwnProperty('darkModeEnabled')) commit(types.TOGGLE_DARK_MODE, settings.darkModeEnabled);
+  if (settings.hasOwnProperty('statsRange')) commit(types.UPDATE_RANGE, settings.statsRange);
   if (settings.hasOwnProperty('themeColor')) commit(types.CHANGE_THEME, settings.themeColor);
 
   commit(types.LOADED);
