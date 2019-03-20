@@ -1,6 +1,9 @@
 import * as types from './mutation-types';
 
 export default {
+  [types.CHANGE_MONTH](state, payload) {
+    state.month = payload;
+  },
   [types.CHANGE_THEME](state, payload) {
     state.themeColor = payload;
   },

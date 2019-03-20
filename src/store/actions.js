@@ -1,5 +1,9 @@
 import * as types from './mutation-types';
 
+export const changeMonth = ({ commit }, payload) => {
+  commit(types.CHANGE_MONTH, payload);
+};
+
 export const changeTheme = ({ commit }, payload) => {
   commit(types.CHANGE_THEME, payload);
   browser.storage.local.set({'themeColor': payload });
