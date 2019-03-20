@@ -54,8 +54,6 @@ import VisitsTrend from './components/VisitsTrend.vue';
 import DayOfWeekTrend from './components/DayOfWeekTrend.vue';
 import TimeOfDayTrend from './components/TimeOfDayTrend.vue';
 
-var moment = require('moment');
-
 export default {
   name: 'StatsView',
   components: {
@@ -87,7 +85,7 @@ export default {
   },
   methods: {
     async calculateStats(duration) {
-      let d = moment().subtract(duration, 'day').startOf('day');
+      let d = this.$moment().subtract(duration, 'day').startOf('day');
       let count;
       let dow = [0, 0, 0, 0, 0, 0, 0];
       let tod = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -96,7 +94,7 @@ export default {
       let visits = await browser.history.search({
         text: "",
         startTime: d.valueOf(),
-        endTime: moment().valueOf(),
+        endTime: this.$moment().valueOf(),
         maxResults: 1000000000
       });
 
@@ -124,7 +122,7 @@ export default {
             }
 
             // get day of week & time of day
-            visitTime = moment(visits[index].lastVisitTime);
+            visitTime = this.$moment(visits[index].lastVisitTime);
             dow[visitTime.day()]++;
             tod[visitTime.hour()]++;
 
