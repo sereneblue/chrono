@@ -161,19 +161,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .theme--light .ranges {
     color: rgba(0, 0, 0, 0.5);
-  }
-  .theme--light .ranges span.active {
-    color: black;
+
+    & span.active {
+      color: black;
+    }
   }
 
   .theme--dark .ranges {
     color: rgba(255, 255, 255, 0.5);
-  }
-  .theme--dark .ranges span.active {
-    color: white;
+
+    & span.active {
+      color: white;
+    }
   }
 
   .ranges span {
