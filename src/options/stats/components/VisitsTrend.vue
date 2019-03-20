@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import colors from 'vuetify/es5/util/colors';
-
 export default {
   name: 'VisitsTrend',
   props: ['data'],
@@ -53,11 +51,11 @@ export default {
             data: dataset,
             type: 'line',
             pointRadius: 2,
-            backgroundColor: colors[this.themeColor].base,
-            borderColor: colors[this.themeColor].darken3,
+            backgroundColor: this.$colors[this.themeColor].base,
+            borderColor: this.$colors[this.themeColor].darken3,
             borderWidth: 2,
-            hoverBackgroundColor: colors[this.themeColor].lighten1,
-            hoverBorderColor: colors[this.themeColor].darken3,
+            hoverBackgroundColor: this.$colors[this.themeColor].lighten1,
+            hoverBorderColor: this.$colors[this.themeColor].darken3,
             fill: true
           }]
         },
@@ -125,10 +123,10 @@ export default {
     },
     themeColor: {
       handler (val, oldVal) {
-        this.chart.data.datasets[0].backgroundColor = colors[this.themeColor].base;
-        this.chart.data.datasets[0].borderColor = colors[this.themeColor].darken3;
-        this.chart.data.datasets[0].hoverBackgroundColor = colors[this.themeColor].lighten1;
-        this.chart.data.datasets[0].hoverBorderColor = colors[this.themeColor].darken3;
+        this.chart.data.datasets[0].backgroundColor = this.$colors[this.themeColor].base;
+        this.chart.data.datasets[0].borderColor = this.$colors[this.themeColor].darken3;
+        this.chart.data.datasets[0].hoverBackgroundColor = this.$colors[this.themeColor].lighten1;
+        this.chart.data.datasets[0].hoverBorderColor = this.$colors[this.themeColor].darken3;
         this.chart.update();
       }
     }

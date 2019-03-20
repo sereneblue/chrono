@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import colors from 'vuetify/es5/util/colors';
-
 export default {
   name: 'TimeOfDayTrend',
   props: ['data'],
@@ -48,11 +46,11 @@ export default {
           labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
           datasets: [{
             data: this.data,
-            backgroundColor: colors[this.themeColor].base,
-            borderColor: colors[this.themeColor].darken3,
+            backgroundColor: this.$colors[this.themeColor].base,
+            borderColor: this.$colors[this.themeColor].darken3,
             borderWidth: 2,
-            hoverBackgroundColor: colors[this.themeColor].lighten1,
-            hoverBorderColor: colors[this.themeColor].darken3,
+            hoverBackgroundColor: this.$colors[this.themeColor].lighten1,
+            hoverBorderColor: this.$colors[this.themeColor].darken3,
           }]
         },
         options: {
@@ -109,10 +107,10 @@ export default {
     },
     themeColor: {
       handler() {
-        this.chart.data.datasets[0].backgroundColor = colors[this.themeColor].base;
-        this.chart.data.datasets[0].borderColor = colors[this.themeColor].darken3;
-        this.chart.data.datasets[0].hoverBackgroundColor = colors[this.themeColor].lighten1;
-        this.chart.data.datasets[0].hoverBorderColor = colors[this.themeColor].darken3;
+        this.chart.data.datasets[0].backgroundColor = this.$colors[this.themeColor].base;
+        this.chart.data.datasets[0].borderColor = this.$colors[this.themeColor].darken3;
+        this.chart.data.datasets[0].hoverBackgroundColor = this.$colors[this.themeColor].lighten1;
+        this.chart.data.datasets[0].hoverBorderColor = this.$colors[this.themeColor].darken3;
         this.chart.update();
       }
     }

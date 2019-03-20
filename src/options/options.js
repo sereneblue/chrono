@@ -7,10 +7,13 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'typeface-roboto';
 
+import colors from 'vuetify/es5/util/colors';
 import moment from 'moment'
 import store from '../store';
 
 Vue.prototype.$moment = moment;
+Vue.prototype.$colors = colors;
+
 Vue.use(Vuetify);
 
 /* eslint-disable no-new */
