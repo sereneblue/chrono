@@ -24,7 +24,7 @@
 
       <v-tab-item key="history">
         <v-container fluid>
-          1
+          <HistoryView />
         </v-container>
       </v-tab-item>
 
@@ -44,12 +44,14 @@
 </template>
 
 <script>
+import HistoryView from './history/HistoryView.vue';
 import StatsView from './stats/StatsView.vue';
 import SettingsView from './settings/SettingsView.vue';
 
 export default {
   name: 'App',
   components: {
+    HistoryView,
     StatsView,
     SettingsView
   },
