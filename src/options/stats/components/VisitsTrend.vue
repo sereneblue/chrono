@@ -103,6 +103,10 @@ export default {
   watch: {
     data: {
       handler (val, oldVal) {
+        if (this.chart) {
+          this.chart.destroy()
+        }
+        
         this.renderChart();
       }
     },

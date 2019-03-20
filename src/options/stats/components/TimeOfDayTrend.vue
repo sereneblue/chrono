@@ -88,6 +88,10 @@ export default {
   watch: {
     data: {
       handler() {
+        if (this.chart) {
+          this.chart.destroy()
+        }
+        
         this.renderChart();
       }
     },
