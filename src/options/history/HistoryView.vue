@@ -110,16 +110,20 @@ export default {
       });
 
       for (var i = visits.length - 1; i >= 0; i--) {
-        date.setTime(visits[i].lastVisitTime);
-        d = this.getDate(date);
+        // check if visit date falls within search range 
+        if (monthStart <= visits[i].lastVisitTime &&
+            visits[i].lastVisitTime <= monthEnd) {
+          date.setTime(visits[i].lastVisitTime);
+          d = this.getDate(date);
 
-        if (events[d]) {
-          events[d].pages++;
-        } else {
-          events[d] = {
-            pages: 1,
-            views: 0
-          };
+          if (events[d]) {
+            events[d].pages++;
+          } else {
+            events[d] = {
+              pages: 1,
+              views: 0
+            };
+          }
         }
 
         urlVisits = await browser.history.getVisits({
@@ -149,11 +153,13 @@ export default {
 
       this.visits = events;
     },
-    next() {
+    async next() {
       this.$refs.historycal.$refs.calendar.next();
+      await this.getVisits();
     },
-    prev() {
+    async prev() {
       this.$refs.historycal.$refs.calendar.prev();
+      await this.getVisits();
     }
   }
 };
