@@ -51,7 +51,7 @@
         class="mb-3"
       >
         <v-sheet height="80vh">
-          <HistoryCalendar ref="historycal" />
+          <HistoryCalendar :visits="visits" ref="historycal" />
         </v-sheet>
       </v-flex>
     </v-layout>
@@ -89,18 +89,65 @@ export default {
     }
   },
   methods: {
+    getDate(d) {
+      return d.toISOString().split('T')[0];
+    },
     async getVisits() {
       let m = this.$moment(this.start);
-      let date = null;
+      let monthStart = m.startOf('month').valueOf();
+      let monthEnd = m.endOf('month').valueOf();
+      
+      let date = new Date(0);
+      let d = null;
+      let urlVisits = null;
+      let events = {};
 
       let visits = await browser.history.search({
         text: "",
-        startTime: m.startOf('month').valueOf(),
-        endTime: m.endOf('month').valueOf(),
+        startTime: monthStart,
+        endTime: monthEnd,
         maxResults: 1000000000
       });
 
-      this.visits = visits;
+      for (var i = visits.length - 1; i >= 0; i--) {
+        date.setTime(visits[i].lastVisitTime);
+        d = this.getDate(date);
+
+        if (events[d]) {
+          events[d].pages++;
+        } else {
+          events[d] = {
+            pages: 1,
+            views: 0
+          };
+        }
+
+        urlVisits = await browser.history.getVisits({
+          url: visits[i].url
+        });
+
+        for (var j = 0; j < urlVisits.length; j++) {
+          if (monthStart <= urlVisits[j].visitTime &&
+              urlVisits[j].visitTime <= monthEnd) {
+
+            date.setTime(urlVisits[j].visitTime);
+            d = this.getDate(date);
+
+            if (events[d]) {
+              events[d].views++;
+            } else {
+              events[d] = {
+                pages: 1,
+                views: 1
+              };
+            }
+          } else {
+            break;
+          }
+        }
+      }
+
+      this.visits = events;
     },
     next() {
       this.$refs.historycal.$refs.calendar.next();

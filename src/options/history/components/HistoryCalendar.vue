@@ -5,12 +5,25 @@
     type="month"
     :color="themeColor"
   >
+    <template v-slot:day="{ date }">
+      <template v-if="visits[date]">
+        <v-card flat tile>
+          <v-card-title>
+            <div>
+              <span>{{ visits[date].views }} views</span><br>
+              <span>{{ visits[date].pages }} pages</span>
+            </div>
+          </v-card-title>
+        </v-card>
+      </template>
+    </template>
   </v-calendar>
 </template>
 
 <script>
 export default {
   name: 'HistoryCalendar',
+  props: ['visits'],
   computed: {
     start: {
       get() {
