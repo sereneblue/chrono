@@ -26,9 +26,9 @@ export default {
     eventColors() {
       return {
         dark: {
-          low: this.$colors.lightGreen.darken4, 
-          med: this.$colors.orange.darken2,
-          high:  this.$colors.red.darken4,
+          low: this.$colors.lightGreen.lighten1, 
+          med: this.$colors.amber.lighten1,
+          high:  this.$colors.red.lighten2,
         },
         light: {
           low: this.$colors.lightGreen.lighten4, 
@@ -66,6 +66,7 @@ export default {
 
 <style lang="scss">
   .daily-stats {
+    color: black;
     text-align: left;
     padding: 5px 10px;
   }
