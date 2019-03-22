@@ -7,13 +7,11 @@
   >
     <template v-slot:day="{ date }">
       <template v-if="visits[date]">
-        <v-card flat tile>
-          <v-card-title>
-            <div>
-              <span>{{ visits[date].views }} views</span><br>
-              <span>{{ visits[date].pages }} pages</span>
-            </div>
-          </v-card-title>
+        <v-card flat tile :color="getColor(visits[date].bucket)">
+          <div class="daily-stats">
+            <span>{{ visits[date].views }} views</span><br>
+            <span>{{ visits[date].pages }} {{ visits[date].pages == 1 ? 'page' : 'pages' }}</span>
+          </div>
         </v-card>
       </template>
     </template>
@@ -25,6 +23,20 @@ export default {
   name: 'HistoryCalendar',
   props: ['visits'],
   computed: {
+    eventColors() {
+      return {
+        dark: {
+          low: this.$colors.lightGreen.darken4, 
+          med: this.$colors.orange.darken2,
+          high:  this.$colors.red.darken4,
+        },
+        light: {
+          low: this.$colors.lightGreen.lighten4, 
+          med: this.$colors.amber.lighten3,
+          high: this.$colors.red.lighten4  
+        }
+      }
+    },
     start: {
       get() {
         return this.$store.state.month;
@@ -43,11 +55,21 @@ export default {
 
       return theme;
     }
+  },
+  methods: {
+    getColor(bucket) {
+      return this.$store.state.darkModeEnabled ? this.eventColors.dark[bucket] : this.eventColors.light[bucket];
+    }
   }
 }
 </script>
 
 <style lang="scss">
+  .daily-stats {
+    text-align: left;
+    padding: 5px 10px;
+  }
+
   /* 
     Ideally, shouldn't be doing this 
   */

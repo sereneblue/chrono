@@ -97,8 +97,9 @@ export default {
       let monthStart = m.startOf('month').valueOf();
       let monthEnd = m.endOf('month').valueOf();
       
-      let date = new Date(0);
+      let bucket = null;
       let d = null;
+      let date = new Date(0);
       let urlVisits = null;
       let events = {};
 
@@ -147,6 +148,23 @@ export default {
             }
           } else {
             break;
+          }
+        }
+      }
+
+      let v = Object.keys(events).map(e => [e, events[e].views])
+      v.sort(function(a, b) {return a[1] - b[1] });
+
+      if (v.length > 0) {
+        for (var i = 0; i < v.length; i++) {
+          bucket = parseInt(( v[i][1] - v[0][1]) * 3 / ( v[v.length - 1][1] - v[0][1] ));
+
+          if (bucket == 0) {
+            events[v[i][0]].bucket = "low";
+          } else if (bucket == 1) {
+            events[v[i][0]].bucket = "med";
+          } else {
+            events[v[i][0]].bucket = "high";
           }
         }
       }
