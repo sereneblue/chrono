@@ -29,11 +29,6 @@
       >
         <v-btn>
           <v-icon>
-            search
-          </v-icon>
-        </v-btn>
-        <v-btn>
-          <v-icon>
             delete
           </v-icon>
         </v-btn>
