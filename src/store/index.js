@@ -10,11 +10,14 @@ export default new Vuex.Store({
   state: {
   	activeTab: 'history',
     darkModeEnabled: true,
+    historyOpen: false,
     loaded: false,
     mainView: 'history',
     month: '',
     statsRange: '3m',
-    themeColor: 'indigo'
+    themeColor: 'indigo',
+    viewDay: "",
+    visits: []
   },
   mutations,
   actions

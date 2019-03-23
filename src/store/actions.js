@@ -14,6 +14,10 @@ export const toggleDarkMode = ({ commit }, payload) => {
   browser.storage.local.set({'darkModeEnabled': payload });
 };
 
+export const updateHistoryOpen = ({ commit }, payload) => {
+  commit(types.UPDATE_HISTORY_OPEN, payload);
+};
+
 export const updateRange = ({ commit }, payload) => {
   commit(types.UPDATE_RANGE, payload);
   browser.storage.local.set({'statsRange': payload });
@@ -37,3 +41,11 @@ export const updateView = ({ commit }, payload) => {
   commit(types.UPDATE_VIEW, payload);
   browser.storage.local.set({'mainView': payload });
 };
+
+export const updateViewDay = ({ commit }, payload) => {
+  commit(types.UPDATE_VIEW_DAY, payload);
+};
+
+export const updateVisits = ({ commit }, payload) => {
+  commit(types.UPDATE_VISITS, payload);
+}
