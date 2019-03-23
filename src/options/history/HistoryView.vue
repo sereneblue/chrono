@@ -97,6 +97,7 @@ export default {
       let date = new Date(0);
       let urlVisits = null;
       let events = {};
+      let dayEvents = {};
 
       let visits = await browser.history.search({
         text: "",
@@ -114,11 +115,13 @@ export default {
 
           if (events[d]) {
             events[d].pages++;
+            dayEvents[d].push(visits[i]);
           } else {
             events[d] = {
               pages: 1,
-              views: 0
+              views: 0,
             };
+            dayEvents[d] = [visits[i]];
           }
         }
 
@@ -164,7 +167,12 @@ export default {
         }
       }
 
+      for (var i in dayEvents) {
+        dayEvents[i].sort(function(a, b) {return b.lastVisitTime - a.lastVisitTime });
+      }
+
       this.visits = events;
+      this.$store.dispatch('updateVisits', dayEvents);
     },
     async next() {
       this.$refs.historycal.$refs.calendar.next();

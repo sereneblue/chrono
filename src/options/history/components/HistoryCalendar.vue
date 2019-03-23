@@ -1,5 +1,6 @@
 <template>
   <v-calendar
+    @click:day="getDayHistory"
     ref="calendar"
     v-model="start"
     type="month"
@@ -59,6 +60,12 @@ export default {
   methods: {
     getColor(bucket) {
       return this.$store.state.darkModeEnabled ? this.eventColors.dark[bucket] : this.eventColors.light[bucket];
+    },
+    getDayHistory(day) {
+      if (this.visits[day.date]) {
+        this.$store.dispatch('updateViewDay', day.date);
+        this.$store.dispatch('updateHistoryOpen', true);
+      }
     }
   }
 }
@@ -67,6 +74,7 @@ export default {
 <style lang="scss">
   .daily-stats {
     color: black;
+    cursor: pointer;
     text-align: left;
     padding: 5px 10px;
   }
@@ -74,7 +82,7 @@ export default {
   /* 
     Ideally, shouldn't be doing this 
   */
-  
+
   .v-calendar-weekly__head-weekday {
     padding: 10px 0px !important;
   }
