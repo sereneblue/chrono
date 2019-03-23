@@ -103,8 +103,8 @@ export default {
       let d = null;
       let date = new Date(0);
       let urlVisits = null;
-      let events = {};
-      let dayEvents = {};
+      let events = [];
+      let dailyVisits = {};
 
       let visits = await browser.history.search({
         text: "",
@@ -113,25 +113,7 @@ export default {
         maxResults: 1000000000
       });
 
-      for (var i = visits.length - 1; i >= 0; i--) {
-        // check if visit date falls within search range 
-        if (monthStart <= visits[i].lastVisitTime &&
-            visits[i].lastVisitTime <= monthEnd) {
-          date.setTime(visits[i].lastVisitTime);
-          d = this.getDate(date);
-
-          if (events[d]) {
-            events[d].pages++;
-            dayEvents[d].push(visits[i]);
-          } else {
-            events[d] = {
-              pages: 1,
-              views: 0,
-            };
-            dayEvents[d] = [visits[i]];
-          }
-        }
-
+      for (var i = visits.length - 1; i >= 0; i--) {        
         urlVisits = await browser.history.getVisits({
           url: visits[i].url
         });
@@ -139,47 +121,58 @@ export default {
         for (var j = 0; j < urlVisits.length; j++) {
           if (monthStart <= urlVisits[j].visitTime &&
               urlVisits[j].visitTime <= monthEnd) {
-
-            date.setTime(urlVisits[j].visitTime);
-            d = this.getDate(date);
-
-            if (events[d]) {
-              events[d].views++;
-            } else {
-              events[d] = {
-                pages: 1,
-                views: 1
-              };
-            }
+              events.push({
+                url: visits[i].url,
+                title: visits[i].title,
+                visitTime: urlVisits[j].visitTime,
+              })
           } else {
             break;
           }
         }
       }
 
-      let v = Object.keys(events).map(e => [e, events[e].views])
-      v.sort(function(a, b) {return a[1] - b[1] });
+      // process visits
+      for (var i = 0; i < events.length; i++) {
+        date.setTime(events[i].visitTime);
+        d = this.getDate(date);
 
-      if (v.length > 0) {
-        for (var i = 0; i < v.length; i++) {
-          bucket = parseInt(( v[i][1] - v[0][1]) * 3 / ( v[v.length - 1][1] - v[0][1] ));
-
-          if (bucket == 0) {
-            events[v[i][0]].bucket = "low";
-          } else if (bucket == 1) {
-            events[v[i][0]].bucket = "med";
-          } else {
-            events[v[i][0]].bucket = "high";
+        if (dailyVisits[d]) {
+          // check if unique url
+          if (!dailyVisits[d].visits.find(v => v.url == events[i].url)) {
+            dailyVisits[d].pages++;
+          }
+          dailyVisits[d].views++;
+          dailyVisits[d].visits.push(events[i]);
+        } else {
+          dailyVisits[d] = {
+            pages: 1,
+            views: 1,
+            visits: [events[i]]
           }
         }
       }
 
-      for (var i in dayEvents) {
-        dayEvents[i].sort(function(a, b) {return b.lastVisitTime - a.lastVisitTime });
+      let v = Object.keys(dailyVisits).map(e => [e, dailyVisits[e].views])
+      v.sort(function(a, b) {return a[1] - b[1] });
+
+      for (var i = 0; i < v.length; i++) {
+        bucket = parseInt(( v[i][1] - v[0][1]) * 3 / ( v[v.length - 1][1] - v[0][1] ));
+
+        if (bucket == 0) {
+          dailyVisits[v[i][0]].bucket = "low";
+        } else if (bucket == 1) {
+          dailyVisits[v[i][0]].bucket = "med";
+        } else {
+          dailyVisits[v[i][0]].bucket = "high";
+        }
       }
 
-      this.visits = events;
-      this.$store.dispatch('updateVisits', dayEvents);
+      for (var i in dailyVisits) {
+        dailyVisits[i].visits.sort(function(a, b) {return b.visitTime - a.visitTime });
+      }
+
+      this.$store.dispatch('updateVisits', dailyVisits);
     },
     async next() {
       this.$refs.historycal.$refs.calendar.next();
