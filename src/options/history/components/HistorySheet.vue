@@ -38,7 +38,13 @@
     name: 'HistorySheet',
     computed: {
       history() {
-        return this.$store.state.viewDay ? this.$store.state.visits[this.$store.state.viewDay].visits : [];
+        if (!this.$store.state.viewDay) return [];
+        
+        if (this.$store.state.visits[this.$store.state.viewDay].visits) {
+          return this.$store.state.visits[this.$store.state.viewDay].visits;
+        }
+
+        return [];
       },
       historyDate() {
         return this.$store.state.viewDay ? this.$moment(this.$store.state.viewDay).format('MMMM DD, YYYY') : "";
