@@ -121,7 +121,8 @@ export default {
 
         for (var j = 0; j < urlVisits.length; j++) {
           if (monthStart <= urlVisits[j].visitTime &&
-              urlVisits[j].visitTime <= monthEnd) {
+              urlVisits[j].visitTime <= monthEnd && 
+              urlVisits[j].transition != "reload") {
               events.push({
                 url: visits[i].url,
                 title: visits[i].title,
