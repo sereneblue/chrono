@@ -1,6 +1,7 @@
 <template>
   <v-container fluid grid-list-md text-lg-center>
     <v-select
+      :color="themeColor"
       :items="tabs"
       :value="currentTab"
       @change="updateMainTab"
@@ -15,6 +16,7 @@
       </template>
     </v-select>
     <v-select
+      :color="themeColor"
       :items="colorsList"
       :value="currentTheme"
       @change="changeThemeColor"
