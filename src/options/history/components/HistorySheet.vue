@@ -22,7 +22,7 @@
 
               <v-list-tile-action>
                 <v-btn @click.stop="remove(h.url)" icon ripple>
-                  <v-icon>delete</v-icon>
+                  <v-icon color="grey lighten-1">delete</v-icon>
                 </v-btn>
               </v-list-tile-action>
             </v-list-tile>
