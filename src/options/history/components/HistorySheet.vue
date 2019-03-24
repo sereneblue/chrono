@@ -21,6 +21,11 @@
               </v-list-tile-content>
 
               <v-list-tile-action>
+                <v-btn @click.stop="copy(h.url)" icon ripple>
+                  <v-icon color="grey lighten-1">file_copy</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+              <v-list-tile-action>
                 <v-btn @click.stop="remove(h.url)" icon ripple>
                   <v-icon color="grey lighten-1">delete</v-icon>
                 </v-btn>
@@ -30,12 +35,20 @@
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
+    <v-snackbar v-model="snackbar" timeout="1500" top>
+      URL copied to clipboard!
+    </v-snackbar>
   </div>
 </template>
 
 <script>
   export default {
     name: 'HistorySheet',
+    data() {
+      return {
+        snackbar: false
+      }
+    },
     computed: {
       history() {
         if (!this.$store.state.viewDay) return [];
@@ -70,6 +83,10 @@
       }
     },
     methods: {
+      copy(url) {
+        this.$copy(url);
+        this.snackbar = true;
+      },
       openLink(url) {
         browser.tabs.create({ active: false, url : url});
       },
