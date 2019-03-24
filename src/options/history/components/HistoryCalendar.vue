@@ -22,7 +22,6 @@
 <script>
 export default {
   name: 'HistoryCalendar',
-  props: ['visits'],
   computed: {
     eventColors() {
       return {
@@ -55,6 +54,9 @@ export default {
       }
 
       return theme;
+    },
+    visits() {
+      return this.$store.state.visits;
     }
   },
   methods: {

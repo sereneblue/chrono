@@ -46,7 +46,7 @@
         class="mb-3"
       >
         <v-sheet height="80vh">
-          <HistoryCalendar :visits="visits" ref="historycal" />
+          <HistoryCalendar ref="historycal" />
         </v-sheet>
       </v-flex>
     </v-layout>
