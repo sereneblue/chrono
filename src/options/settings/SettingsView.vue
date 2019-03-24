@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import colors from 'vuetify/es5/util/colors';
-
 export default {  
   name: 'SettingsView',
   data() {
@@ -52,7 +50,7 @@ export default {
   computed: {
     colorsList() {
       return Object
-        .keys(colors)
+        .keys(this.$colors)
         .slice(0, -1)
         .map(c => c.replace(/([A-Z])/g, (match) => `-${match.toLowerCase()}`));
     },
@@ -91,7 +89,7 @@ export default {
         c = `${parts[0]}${parts[1].charAt(0).toUpperCase() + parts[1].slice(1)}`;
       }
 
-      return colors[c].base;
+      return this.$colors[c].base;
     },
     updateMainTab(tab) {
       this.$store.dispatch('updateMainTab', tab);
