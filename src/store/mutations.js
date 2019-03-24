@@ -17,14 +17,14 @@ export default {
   [types.UPDATE_HISTORY_OPEN](state, payload) {
     state.historyOpen = payload;
   },
+  [types.UPDATE_MAIN_TAB](state, payload) {
+    state.mainTab = payload;
+  },
   [types.UPDATE_RANGE](state, payload) {
     state.statsRange = payload;
   },
   [types.UPDATE_TAB](state, payload) {
     state.activeTab = payload;
-  },
-  [types.UPDATE_VIEW](state, payload) {
-    state.mainView = payload;
   },
   [types.UPDATE_VIEW_DAY](state, payload) {
     state.viewDay = payload;

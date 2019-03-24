@@ -12,6 +12,11 @@
         History
       </v-tab>
 
+      <v-tab key="search">
+        <v-icon left small>search</v-icon>
+        Search
+      </v-tab>
+
       <v-tab key="stats">
         <v-icon left small>trending_up</v-icon>
         Stats
@@ -25,6 +30,11 @@
       <v-tab-item key="history">
         <v-container fluid>
           <HistoryView />
+        </v-container>
+      </v-tab-item>
+
+      <v-tab-item key="search">
+        <v-container fluid>
         </v-container>
       </v-tab-item>
 
@@ -58,10 +68,19 @@ export default {
   created() {
     this.$store.dispatch('updateSettings');
   },
+  data() {
+    return {
+      tabs: {
+        'history': 0,
+        'search': 1,
+        'stats': 2
+      }
+    }
+  },
   computed: {
     activeTab: {
       get() {
-        return this.$store.state.activeTab == 'history' ? 0 : 1;
+        return this.tabs[this.$store.state.activeTab];
       },
       set() {
         // do nothing

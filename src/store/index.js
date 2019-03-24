@@ -12,7 +12,7 @@ export default new Vuex.Store({
     darkModeEnabled: true,
     historyOpen: false,
     loaded: false,
-    mainView: 'history',
+    mainTab: 'history',
     month: '',
     statsRange: '3m',
     themeColor: 'indigo',

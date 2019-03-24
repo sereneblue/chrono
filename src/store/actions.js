@@ -28,6 +28,11 @@ export const updateHistoryOpen = ({ commit }, payload) => {
   commit(types.UPDATE_HISTORY_OPEN, payload);
 };
 
+export const updateMainTab = ({ commit }, payload) => {
+  commit(types.UPDATE_MAIN_TAB, payload);
+  browser.storage.local.set({'mainTab': payload });
+};
+
 export const updateRange = ({ commit }, payload) => {
   commit(types.UPDATE_RANGE, payload);
   browser.storage.local.set({'statsRange': payload });
@@ -36,9 +41,9 @@ export const updateRange = ({ commit }, payload) => {
 export const updateSettings = async ({ commit }) => {  
   let settings = await browser.storage.local.get();
 
-  if (settings.hasOwnProperty('mainView')) {
-    commit(types.UPDATE_TAB, settings.mainView);
-    commit(types.UPDATE_VIEW, settings.mainView);
+  if (settings.hasOwnProperty('mainTab')) {
+    commit(types.UPDATE_MAIN_TAB, settings.mainTab);
+    commit(types.UPDATE_TAB, settings.mainTab);
   }
   if (settings.hasOwnProperty('darkModeEnabled')) commit(types.TOGGLE_DARK_MODE, settings.darkModeEnabled);
   if (settings.hasOwnProperty('statsRange')) commit(types.UPDATE_RANGE, settings.statsRange);
@@ -46,11 +51,6 @@ export const updateSettings = async ({ commit }) => {
 
   commit(types.LOADED);
 }
-
-export const updateView = ({ commit }, payload) => {
-  commit(types.UPDATE_VIEW, payload);
-  browser.storage.local.set({'mainView': payload });
-};
 
 export const updateViewDay = ({ commit }, payload) => {
   commit(types.UPDATE_VIEW_DAY, payload);

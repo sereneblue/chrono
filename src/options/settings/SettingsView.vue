@@ -1,10 +1,10 @@
 <template>
   <v-container fluid grid-list-md text-lg-center>
     <v-select
-      :items="views"
-      :value="currentView"
-      @change="updateMainView"
-      label="Main view"
+      :items="tabs"
+      :value="currentTab"
+      @change="updateMainTab"
+      label="Main tab"
     >
       <template slot="item" slot-scope="data">
         {{ data.item | toTitleCase }}
@@ -42,8 +42,9 @@ export default {
   name: 'SettingsView',
   data() {
     return {
-      views: [
+      tabs: [
         'history',
+        'search',
         'stats'
       ]
     }
@@ -55,11 +56,11 @@ export default {
         .slice(0, -1)
         .map(c => c.replace(/([A-Z])/g, (match) => `-${match.toLowerCase()}`));
     },
+    currentTab() {
+      return this.$store.state.mainView;
+    },
     currentTheme() {
       return this.$store.state.themeColor;
-    },
-    currentView() {
-      return this.$store.state.mainView;
     },
     darkModeEnabled: {
       get () {
@@ -92,8 +93,8 @@ export default {
 
       return colors[c].base;
     },
-    updateMainView(view) {
-      this.$store.dispatch('updateView', view);
+    updateMainTab(tab) {
+      this.$store.dispatch('updateMainTab', tab);
     }
   }
 };
