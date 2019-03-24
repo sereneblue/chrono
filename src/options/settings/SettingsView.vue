@@ -58,7 +58,7 @@ export default {
         .map(c => c.replace(/([A-Z])/g, (match) => `-${match.toLowerCase()}`));
     },
     currentTab() {
-      return this.$store.state.mainView;
+      return this.$store.state.mainTab;
     },
     currentTheme() {
       return this.$store.state.themeColor;
