@@ -63,9 +63,7 @@ export default {
   },
   data() {
     return {
-      currentMonth: this.$moment().format("MMMM YYYY"),
-      searchVisits: [],
-      visits: {}
+      currentMonth: this.$moment().format("MMMM YYYY")
     }
   },
   async created() {
