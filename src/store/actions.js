@@ -9,6 +9,16 @@ export const changeTheme = ({ commit }, payload) => {
   browser.storage.local.set({'themeColor': payload });
 };
 
+export const removeHistory = ({ commit, state }, payload) => {
+  let browserHistory = state.visits;
+
+  for (var i in browserHistory) {
+    browserHistory[i].visits = browserHistory[i].visits.filter(v => v.url !== payload);
+  }
+
+  commit(types.UPDATE_VISITS, browserHistory);
+};
+
 export const toggleDarkMode = ({ commit }, payload) => {
   commit(types.TOGGLE_DARK_MODE, payload);
   browser.storage.local.set({'darkModeEnabled': payload });

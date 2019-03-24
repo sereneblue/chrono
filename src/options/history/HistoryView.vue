@@ -50,16 +50,19 @@
         </v-sheet>
       </v-flex>
     </v-layout>
+    <HistorySheet />
   </v-container>
 </template>
 
 <script>
 import HistoryCalendar from './components/HistoryCalendar.vue';
+import HistorySheet from './components/HistorySheet.vue';
 
-export default {  
+export default {
   name: 'HistoryView',
   components: {
-    HistoryCalendar
+    HistoryCalendar,
+    HistorySheet
   },
   data() {
     return {
