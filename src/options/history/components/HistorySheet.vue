@@ -35,7 +35,7 @@
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
-    <v-snackbar v-model="snackbar" timeout="1500" top>
+    <v-snackbar v-model="snackbar" :timeout="1500" top>
       URL copied to clipboard!
     </v-snackbar>
   </div>
