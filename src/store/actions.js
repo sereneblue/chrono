@@ -24,6 +24,11 @@ export const toggleDarkMode = ({ commit }, payload) => {
   browser.storage.local.set({'darkModeEnabled': payload });
 };
 
+export const updateGroupByDomain = ({ commit }, payload) => {
+  commit(types.UPDATE_GROUP_BY_DOMAIN, payload);
+  browser.storage.local.set({'groupByDomain': payload });
+};
+
 export const updateHistoryOpen = ({ commit }, payload) => {
   commit(types.UPDATE_HISTORY_OPEN, payload);
 };
@@ -48,6 +53,7 @@ export const updateSettings = async ({ commit }) => {
   if (settings.hasOwnProperty('darkModeEnabled')) commit(types.TOGGLE_DARK_MODE, settings.darkModeEnabled);
   if (settings.hasOwnProperty('statsRange')) commit(types.UPDATE_RANGE, settings.statsRange);
   if (settings.hasOwnProperty('themeColor')) commit(types.CHANGE_THEME, settings.themeColor);
+  if (settings.hasOwnProperty('groupByDomain')) commit(types.UPDATE_GROUP_BY_DOMAIN, settings.groupByDomain);
 
   commit(types.LOADED);
 }

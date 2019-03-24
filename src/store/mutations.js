@@ -14,6 +14,9 @@ export default {
   [types.TOGGLE_DARK_MODE](state, payload) {
     state.darkModeEnabled = payload;
   },
+  [types.UPDATE_GROUP_BY_DOMAIN](state, payload) {
+    state.groupByDomain = payload;
+  },
   [types.UPDATE_HISTORY_OPEN](state, payload) {
     state.historyOpen = payload;
   },

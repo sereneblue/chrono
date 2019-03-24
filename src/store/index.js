@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
   	activeTab: 'history',
     darkModeEnabled: true,
+    groupByDomain: false,
     historyOpen: false,
     loaded: false,
     mainTab: 'history',
