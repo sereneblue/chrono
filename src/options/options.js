@@ -11,8 +11,16 @@ import colors from 'vuetify/es5/util/colors';
 import moment from 'moment'
 import store from '../store';
 
-Vue.prototype.$moment = moment;
+Vue.prototype.$copy = (text) => {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+};
 Vue.prototype.$colors = colors;
+Vue.prototype.$moment = moment;
 
 Vue.use(Vuetify);
 
