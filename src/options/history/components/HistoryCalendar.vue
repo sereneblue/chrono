@@ -7,7 +7,7 @@
     :color="themeColor"
   >
     <template v-slot:day="{ date }">
-      <template v-if="visits[date]">
+      <template v-if="visits[date] && visits[date].visits.length">
         <v-card flat tile :color="getColor(visits[date].bucket)">
           <div class="daily-stats">
             <span>{{ visits[date].views }} views</span><br>
