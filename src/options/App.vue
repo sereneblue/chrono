@@ -35,6 +35,7 @@
 
       <v-tab-item key="search">
         <v-container fluid>
+          <SearchView />
         </v-container>
       </v-tab-item>
 
@@ -55,15 +56,17 @@
 
 <script>
 import HistoryView from './history/HistoryView.vue';
-import StatsView from './stats/StatsView.vue';
+import SearchView from './search/SearchView.vue'; 
 import SettingsView from './settings/SettingsView.vue';
+import StatsView from './stats/StatsView.vue';
 
 export default {
   name: 'App',
   components: {
     HistoryView,
-    StatsView,
-    SettingsView
+    SearchView,
+    SettingsView,
+    StatsView
   },
   created() {
     this.$store.dispatch('updateSettings');
