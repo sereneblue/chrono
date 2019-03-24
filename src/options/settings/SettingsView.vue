@@ -30,6 +30,7 @@
     </v-select>
     <v-switch
       v-model="darkModeEnabled"
+      :color="themeColor"
       :label="`Dark Mode ${darkModeEnabled ? 'Enabled' : 'Disabled'}`"
     ></v-switch>
   </v-container>
@@ -67,6 +68,9 @@ export default {
       set (value) {
         this.$store.dispatch('toggleDarkMode', value);
       }
+    },
+    themeColor() {
+      return this.$store.state.themeColor;
     }
   },
   filters: {
