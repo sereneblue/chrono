@@ -22,8 +22,8 @@
           <v-list two-line>
             <v-list-tile
               v-for="result in results"
+              @click="openModal(result.url)"
               :key="results.id"
-              @click="openLink(result.url)"
             >
               <v-list-tile-avatar>
                 {{ result.lastVisitTime | formatDate }}
@@ -33,28 +33,28 @@
                 <v-list-tile-title class="subheading">{{ result.title ? result.title : "-- blank title --" }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
               </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-btn @click.stop="copy(result.url)" icon ripple>
-                  <v-icon color="grey lighten-1">file_copy</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-              <v-list-tile-action>
-                <v-btn @click.stop="remove(result.url)" icon ripple>
-                  <v-icon color="grey lighten-1">delete</v-icon>
-                </v-btn>
-              </v-list-tile-action>
             </v-list-tile>
           </v-list>
         </div>
         <div v-else-if="results.length > 0 && groupByDomain">
           <v-subheader>{{ results.length }} results found, {{ groupedResults.length }} domains found</v-subheader>
           <v-list v-for="group in groupedResults" two-line subheader>
-            <v-subheader>{{ group.host }}</v-subheader>
+            <v-layout justify-space-between>
+              <v-subheader>{{ group.host }}</v-subheader>
+              <v-btn 
+                @click.stop="removeHost(group.host)"
+                :color="themeColor"
+                right
+                small
+                style="align-self: center;"
+                >
+                Forget site
+              </v-btn>
+            </v-layout>
             <v-list-tile
               v-for="result in group.results"
+              @click="openModal(result.url)"
               :key="result.id"
-              @click="openLink(result.url)"
             >
               <v-list-tile-avatar>
                 {{ result.lastVisitTime | formatDate }}
@@ -64,17 +64,6 @@
                 <v-list-tile-title class="subheading">{{ result.title ? result.title : "-- blank title --" }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
               </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-btn @click.stop="copy(result.url)" icon ripple>
-                  <v-icon color="grey lighten-1">file_copy</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-              <v-list-tile-action>
-                <v-btn @click.stop="remove(result.url)" icon ripple>
-                  <v-icon color="grey lighten-1">delete</v-icon>
-                </v-btn>
-              </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
           </v-list>
@@ -87,6 +76,38 @@
     <v-snackbar v-model="snackbar" :timeout="1500" top>
       URL copied to clipboard!
     </v-snackbar>
+    <v-dialog
+      v-model="dialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title class="headline">Choose an action for this URL</v-card-title>
+        <v-card-text>
+          {{ url.length > 100 ? url.slice(0, 100) + '...' : url }}
+          <v-btn
+            @click="openLink"
+            :color="themeColor"
+            block
+          >
+            Open link in new tab
+          </v-btn>
+          <v-btn
+            @click="copy"
+            :color="themeColor"
+            block
+          >
+            Copy URL to clipboard
+          </v-btn>
+          <v-btn
+            @click="remove"
+            :color="themeColor"
+            block
+          >
+            Delete URL from history
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -95,11 +116,13 @@ export default {
   name: 'SearchView',
   data() {
     return {
+      dialog: false,
       errorMessage: "",
       groupedResults: [],
       query: "",
       results: [],
-      snackbar: false
+      snackbar: false,
+      url: ""
     }
   },
   computed: {
@@ -122,12 +145,18 @@ export default {
     }
   },
   methods: {
-    copy(url) {
-      this.$copy(url);
+    copy() {
+      this.$copy(this.url);
       this.snackbar = true;
+      this.dialog = false;
     },
-    openLink(url) {
-      browser.tabs.create({ active: false, url : url});
+    openLink() {
+      browser.tabs.create({ active: false, url : this.url });
+      this.dialog = false;
+    },
+    openModal(url) {
+      this.dialog = true;
+      this.url = url;
     },
     parseQuery(query) {
       let q = {
@@ -192,9 +221,10 @@ export default {
       q.query.text = query.replace(/\s\-(?=\s|$)/g, '');
       return q;
     },
-    async remove(url) {
-      await browser.history.deleteUrl({ url: url });
+    async remove() {
+      await browser.history.deleteUrl({ url: this.url });
       await this.search();
+      this.dialog = false;
     },
     async search() {
       let details = this.parseQuery(this.query);
