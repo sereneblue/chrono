@@ -89,21 +89,21 @@
             :color="themeColor"
             block
           >
-            Open link in new tab
+            Open in new tab
           </v-btn>
           <v-btn
             @click="copy"
             :color="themeColor"
             block
           >
-            Copy URL to clipboard
+            Copy to clipboard
           </v-btn>
           <v-btn
             @click="remove"
             :color="themeColor"
             block
           >
-            Delete URL from history
+            Delete from history
           </v-btn>
         </v-card-text>
       </v-card>
