@@ -6,7 +6,7 @@
         xs12
         class="text-sm-left text-xs-center"
       >
-        <v-btn @click="prev()">
+        <v-btn @click="prev">
           <v-icon
             left
           >
@@ -27,12 +27,12 @@
         xs12
         class="text-sm-right text-xs-center"
       >
-        <v-btn>
+        <v-btn @click="clearHistory.dialog = true" >
           <v-icon>
             delete
           </v-icon>
         </v-btn>
-        <v-btn @click="next()" :disabled="isDisabled">
+        <v-btn @click="next" :disabled="isDisabled">
           Next
           <v-icon
             right
@@ -51,6 +51,99 @@
       </v-flex>
     </v-layout>
     <HistorySheet />
+    <v-dialog
+      v-model="clearHistory.dialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title class="headline justify-center">Clear History</v-card-title>
+        <v-card-text>
+          <v-menu
+            v-model="clearHistory.start.menu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="clearHistory.start.date"
+                :color="themeColor"
+                label="Start date"
+                prepend-icon="event"
+                readonly
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker 
+              v-model="clearHistory.start.date" 
+              @input="clearHistory.start.menu = false" 
+              :color="themeColor"
+              :max="getDate(new Date())"
+              no-title
+              scrollable
+              >
+            </v-date-picker>
+          </v-menu>
+          <v-menu
+            v-model="clearHistory.end.menu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="clearHistory.end.date"
+                :color="themeColor"
+                label="End date"
+                prepend-icon="event"
+                readonly
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker 
+              v-model="clearHistory.end.date" 
+              @input="clearHistory.end.menu = false" 
+              :color="themeColor"
+              :max="getDate(new Date())"
+              no-title
+              scrollable
+              >
+            </v-date-picker>
+          </v-menu>
+          <v-container grid-list-md text-xs-center>
+            <v-layout row wrap>
+              <v-flex xs6>
+                <v-btn
+                  @click="clearBrowsingHistory('all')"
+                  color="warning"
+                  block
+                >
+                  Clear All
+                </v-btn>
+              </v-flex>
+              <v-flex xs6>
+                <v-btn
+                  @click="clearBrowsingHistory"
+                  color="info"
+                  block
+                >
+                  Clear Range
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
+          <p v-if="clearHistory.showMessage" class="text-xs-center">Successfully cleared history!</p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -66,6 +159,18 @@ export default {
   },
   data() {
     return {
+      clearHistory: {
+        dialog: false,
+        showMessage: false,
+        end: {
+          date: this.getDate(new Date()),
+          menu: false
+        },
+        start: {
+          date: this.getDate(new Date()),
+          menu: false
+        }
+      },
       currentMonth: this.$moment().format("MMMM YYYY")
     }
   },
@@ -82,9 +187,32 @@ export default {
     },
     start() {
       return this.$store.state.month;
+    },
+    themeColor() {
+      return this.$store.state.themeColor;
     }
   },
   methods: {
+    async clearBrowsingHistory(allHistory) {
+      if (allHistory == 'all') {
+        await browser.history.deleteAll();
+      } else {
+        let startTime = this.$moment(this.clearHistory.start.date).startOf('day').valueOf();
+        let endTime = this.$moment(this.clearHistory.end.date).endOf('day').valueOf();
+
+        await browser.history.deleteRange({
+          startTime,
+          endTime 
+        });
+      }
+
+      this.clearHistory.showMessage = true;
+
+      setTimeout(() => {
+        this.clearHistory.dialog = false;
+        this.clearHistory.showMessage = false;
+      }, 2000);
+    },
     getDate(d) {
       let month = '' + (d.getMonth() + 1);
       let day = '' + d.getDate();
