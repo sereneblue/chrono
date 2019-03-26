@@ -34,7 +34,7 @@
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this URL</v-card-title>
         <v-card-text>
-          {{ url.length > 100 ? url.slice(0, 100) + '...' : url }}
+          <div style="padding-bottom: 10px;">{{ url.length > 100 ? url.slice(0, 100) + '...' : url }}</div>
           <v-btn
             @click="openLink"
             :color="themeColor"
@@ -56,6 +56,7 @@
           >
             Delete from history
           </v-btn>
+          <p v-if="showMessage" class="text-xs-center">Successfully removed URL from history!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -68,6 +69,7 @@
     data() {
       return {
         dialog: false,
+        showMessage: false,
         snackbar: false,
         url: ""
       }
@@ -112,11 +114,17 @@
       copy() {
         this.$copy(this.url);
         this.snackbar = true;
-        this.dialog = false;
+
+        setTimeout(() => {
+          this.dialog = false;
+        }, 1000);
       },
       openLink() {
         browser.tabs.create({ active: false, url : this.url });
-        this.dialog = false;
+
+        setTimeout(() => {
+          this.dialog = false;
+        }, 500);
       },
       openModal(url) {
         this.dialog = true;
@@ -125,7 +133,12 @@
       remove() {
         browser.history.deleteUrl({ url: this.url });
         this.$store.dispatch('removeHistory', this.url);
-        this.dialog = false;
+        this.showMessage = true;
+
+        setTimeout(() => {
+          this.dialog = false;
+          this.showMessage = false;
+        }, 1500);
       }
     }
   }
