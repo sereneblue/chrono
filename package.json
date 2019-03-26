@@ -1,7 +1,7 @@
 {
   "name": "chrono",
-  "version": "0.0.1",
-  "description": "Browser history visualizer",
+  "version": "1.0.0",
+  "description": "Extend Firefox's history capabilities with browsing stats, improved searching and several essential features",
   "author": "sereneblue",
   "license": "MIT",
   "scripts": {
