@@ -18,7 +18,7 @@
       </v-flex>
       <v-flex>
         <div v-if="results.length > 0 && !groupByDomain">
-          <v-subheader>{{ results.length }} results found</v-subheader>
+          <v-subheader>{{ results.length }} {{results.length == 1 ? 'result' : 'results' }} found</v-subheader>
           <v-list two-line>
             <v-list-tile
               v-for="result in results"
@@ -37,12 +37,13 @@
           </v-list>
         </div>
         <div v-else-if="results.length > 0 && groupByDomain">
-          <v-subheader>{{ results.length }} results found, {{ groupedResults.length }} domains found</v-subheader>
+          <v-subheader>{{ results.length }} {{groupedResults.length == 1 ? 'result' : 'results' }} found, {{ groupedResults.length }} {{ groupedResults.length == 1 ? 'domain' : 'domains' }} found</v-subheader>
           <v-list v-for="group in groupedResults" two-line subheader>
             <v-layout justify-space-between>
               <v-subheader>{{ group.host }}</v-subheader>
               <v-btn 
-                @click.stop="removeHost(group.host)"
+                v-if="group.host"
+                @click="openBrowsingDataModal(group.host)"
                 :color="themeColor"
                 right
                 small
@@ -83,7 +84,7 @@
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this URL</v-card-title>
         <v-card-text>
-          {{ url.length > 100 ? url.slice(0, 100) + '...' : url }}
+          <div style="padding-bottom: 10px;">{{ url.length > 100 ? url.slice(0, 100) + '...' : url }}</div>
           <v-btn
             @click="openLink"
             :color="themeColor"
@@ -105,6 +106,29 @@
           >
             Delete from history
           </v-btn>
+          <p v-if="showMessage" class="text-xs-center">Successfully removed URL from history!</p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="browsingData.dialog"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title class="headline justify-center">Choose an action for this site</v-card-title>
+        <v-card-text>
+          <div style="padding-bottom: 10px;">{{ host.length > 100 ? host.slice(0, 100) + '...' : host }}</div>
+          <v-checkbox v-model="browsingData.cookies" :color="themeColor" label="Delete cookies" block></v-checkbox>
+          <v-checkbox v-model="browsingData.history" :color="themeColor" label="Delete history" block></v-checkbox>
+
+          <v-btn
+            @click="deleteBrowsingData"
+            :color="themeColor"
+            block
+          >
+            Clear browsing data
+          </v-btn>
+          <p v-if="showMessage" class="text-xs-center">Successfully cleared browsing data!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -116,11 +140,18 @@ export default {
   name: 'SearchView',
   data() {
     return {
+      browsingData: {
+        cookies: false,
+        dialog: false,
+        history: false
+      },
       dialog: false,
+      host: "",
       errorMessage: "",
       groupedResults: [],
       query: "",
       results: [],
+      showMessage: false,
       snackbar: false,
       url: ""
     }
@@ -148,15 +179,59 @@ export default {
     copy() {
       this.$copy(this.url);
       this.snackbar = true;
-      this.dialog = false;
+
+      setTimeout(() => {
+        this.dialog = false;
+      }, 1000);
+    },
+    async deleteBrowsingData() {
+      if (this.browsingData.cookies) {
+        await browser.browsingData.removeCookies({
+          hostnames: [this.host]
+        });
+      }
+
+      if (this.browsingData.history) {
+        let visits = await browser.history.search({
+          text: this.host,
+          startTime: 0,
+          maxResults: 1000000000
+        });
+
+        // no bulk option??
+        for (var i = 0; i < visits.length; i++) {
+          if ((new URL(visits[i].url)).hostname == this.host) {
+            await browser.history.deleteUrl({
+              url: visits[i].url
+            });
+          }
+        }
+      }
+
+      await this.search();
+      this.showMessage = true;
+
+      setTimeout(() => {
+        this.browsingData.dialog = false;
+        this.browsingData.cookies = false;
+        this.browsingData.history = false;
+        this.showMessage = false;
+      }, 1500);
     },
     openLink() {
       browser.tabs.create({ active: false, url : this.url });
-      this.dialog = false;
+
+      setTimeout(() => {
+        this.dialog = false;
+      }, 500);
+    },
+    openBrowsingDataModal(host) {
+      this.host = host;
+      this.browsingData.dialog = true;
     },
     openModal(url) {
-      this.dialog = true;
       this.url = url;
+      this.dialog = true;
     },
     parseQuery(query) {
       let q = {
@@ -224,7 +299,13 @@ export default {
     async remove() {
       await browser.history.deleteUrl({ url: this.url });
       await this.search();
-      this.dialog = false;
+
+      this.showMessage = true;
+
+      setTimeout(() => {
+        this.dialog = false;
+        this.showMessage = false;
+      }, 1500);
     },
     async search() {
       let details = this.parseQuery(this.query);
