@@ -81,7 +81,7 @@
       max-width="400"
     >
       <v-card>
-        <v-card-title class="headline">Choose an action for this URL</v-card-title>
+        <v-card-title class="headline justify-center">Choose an action for this URL</v-card-title>
         <v-card-text>
           {{ url.length > 100 ? url.slice(0, 100) + '...' : url }}
           <v-btn
