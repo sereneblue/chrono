@@ -4,7 +4,7 @@
   "applications": {
     "gecko": {
       "id": "{4f1f10c5-0ff4-4c63-bf59-c307c94dc552}",
-      "strict_min_version": "54"
+      "strict_min_version": "54.0a1"
     }
   },
   "version": "1.0.0",
@@ -19,20 +19,18 @@
     "default_icon": "icons/icon.svg"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "options_ui": {
     "page": "dashboard.html",
     "open_in_tab": true
   },
   "permissions": ["browsingData", "history", "storage", "tabs"],
-  "commands":{
+  "commands": {
     "openOptionsPage": {
-        "suggested_key": {
-            "default": "Ctrl+Alt+H"
-        }
+      "suggested_key": {
+        "default": "Ctrl+Alt+H"
+      }
     }
   }
 }
