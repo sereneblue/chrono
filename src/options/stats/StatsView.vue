@@ -26,7 +26,7 @@
         </v-flex>
         <v-flex lg8>
           <v-card min-height="100%">
-            <v-subheader>Browsing History (Past 3 Months)</v-subheader>
+            <v-subheader>Browsing History (Past {{ browserHistorySubheader }})</v-subheader>
             <VisitsTrend :data="visits"/>
           </v-card>
         </v-flex>
@@ -79,6 +79,17 @@ export default {
     }
   },
   computed: {
+    browserHistorySubheader() {
+      if (this.range == "1y") {
+        return "year";
+      } else if (this.range == "6m") {
+        return "6 months";
+      } else if (this.range == "3m") {
+        return "3 months";
+      } else {
+        return "month";
+      }
+    },
     range() {
       return this.$store.state.statsRange;
     }
