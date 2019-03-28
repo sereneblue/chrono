@@ -1,21 +1,22 @@
 {
   "name": "chrono",
-  "description": "Browser history visualizer",
+  "description": "Extend Firefox's history capabilties with browsing history stats, improved searching and additional features.",
   "applications": {
     "gecko": {
       "id": "{4f1f10c5-0ff4-4c63-bf59-c307c94dc552}",
       "strict_min_version": "54"
     }
   },
-  "version": "0.0.1",
+  "version": "1.0.0",
   "manifest_version": 2,
+  "homepage_url": "https://github.com/sereneblue/chrono",
   "icons": {
-    "48": "icons/icon_48.png",
-    "128": "icons/icon_128.png"
+    "48": "icons/icon.svg"
   },
   "browser_action": {
     "default_title": "chrono",
-    "default_area": "tabstrip"
+    "default_area": "tabstrip",
+    "default_icon": "icons/icon.svg"
   },
   "background": {
     "scripts": [
