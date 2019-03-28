@@ -35,6 +35,9 @@
       :color="themeColor"
       :label="`Dark Mode ${darkModeEnabled ? 'Enabled' : 'Disabled'}`"
     ></v-switch>
+    <div class="title font-weight-medium">
+      chrono v1.0.0 by <v-btn small href="https://github.com/sereneblue" target="_blank">sereneblue</v-btn>
+    </div>
   </v-container>
 </template>
 
