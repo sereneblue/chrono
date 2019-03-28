@@ -6,7 +6,7 @@
         xs12
         class="text-sm-left text-xs-center"
       >
-        <v-btn @click="prev">
+        <v-btn @click="move('prev')">
           <v-icon
             left
           >
@@ -27,12 +27,18 @@
         xs12
         class="text-sm-right text-xs-center"
       >
+        <v-progress-circular
+          v-if="loadingVisits"
+          indeterminate
+          :color="themeColor"
+          :width="5"
+        ></v-progress-circular>
         <v-btn @click="clearHistory.dialog = true" >
           <v-icon>
             delete
           </v-icon>
         </v-btn>
-        <v-btn @click="next" :disabled="isDisabled">
+        <v-btn @click="move('next')" :disabled="isDisabled">
           Next
           <v-icon
             right
@@ -171,7 +177,8 @@ export default {
           menu: false
         }
       },
-      currentMonth: this.$moment().format("MMMM YYYY")
+      currentMonth: this.$moment().format("MMMM YYYY"),
+      loadingVisits: true,
     }
   },
   async created() {
@@ -302,14 +309,12 @@ export default {
         dailyVisits[i].visits.sort(function(a, b) {return b.visitTime - a.visitTime });
       }
 
+      this.loadingVisits = false;
       this.$store.dispatch('updateVisits', dailyVisits);
     },
-    async next() {
-      this.$refs.historycal.$refs.calendar.next();
-      await this.getVisits();
-    },
-    async prev() {
-      this.$refs.historycal.$refs.calendar.prev();
+    async move(dir) {
+      this.loadingVisits = true;
+      this.$refs.historycal.$refs.calendar[dir]();
       await this.getVisits();
     }
   }
