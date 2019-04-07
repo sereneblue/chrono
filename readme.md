@@ -3,7 +3,9 @@
 ![chrono version](https://img.shields.io/badge/version-1.0.1-brightgreen.svg)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-chrono enhances Firefox's history capabilities with browsing history stats, improved searching and additional features. More details can be found [here](https://sereneblue.github.io/chrono).
+Enhance Firefox's history capabilities with browsing history stats, improved searching and additional features. More details can be found [here](https://sereneblue.github.io/chrono).
+
+![chrono](https://sereneblue.github.io/chrono/images/calendar.png)
 
 ## Installation
 
