@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="ranges text-xs-center">
-      <span @click="selectRange('1y')" :class="{'active' : range == '1y', 'body-2': true }">1 year</span> |
-      <span @click="selectRange('6m')" :class="{'active' : range == '6m', 'body-2': true }">6 months</span> |
-      <span @click="selectRange('3m')" :class="{'active' : range == '3m', 'body-2': true }">3 months</span> |
-      <span @click="selectRange('1m')" :class="{'active' : range == '1m', 'body-2': true }">1 month</span> 
+      <span @click="selectRange('1m')" :class="{ active: range == '1m', 'body-2': true }">1 month</span> |
+      <span @click="selectRange('3m')" :class="{ active: range == '3m', 'body-2': true }">3 months</span> |
+      <span @click="selectRange('6m')" :class="{ active: range == '6m', 'body-2': true }">6 months</span> |
+      <span @click="selectRange('1y')" :class="{ active: range == '1y', 'body-2': true }">1 year</span>
     </div>
     <v-container fluid grid-list-md text-lg-center>
       <v-layout row wrap>
@@ -27,7 +27,7 @@
         <v-flex lg8>
           <v-card min-height="100%">
             <v-subheader>Browsing History (Past {{ browserHistorySubheader }})</v-subheader>
-            <VisitsTrend :data="visits"/>
+            <VisitsTrend :data="visits" />
           </v-card>
         </v-flex>
       </v-layout>
@@ -59,7 +59,7 @@ export default {
   components: {
     VisitsTrend,
     DayOfWeekTrend,
-    TimeOfDayTrend
+    TimeOfDayTrend,
   },
   async created() {
     await this.selectRange(this.range);
@@ -71,42 +71,44 @@ export default {
         '1y': 365,
         '6m': 180,
         '3m': 90,
-        '1m': 30
+        '1m': 30,
       },
       timeOfDay: [],
       topDomains: [],
-      visits: []
-    }
+      visits: [],
+    };
   },
   computed: {
     browserHistorySubheader() {
-      if (this.range == "1y") {
-        return "year";
-      } else if (this.range == "6m") {
-        return "6 months";
-      } else if (this.range == "3m") {
-        return "3 months";
+      if (this.range == '1y') {
+        return 'year';
+      } else if (this.range == '6m') {
+        return '6 months';
+      } else if (this.range == '3m') {
+        return '3 months';
       } else {
-        return "month";
+        return 'month';
       }
     },
     range() {
       return this.$store.state.statsRange;
-    }
+    },
   },
   methods: {
     async calculateStats(duration) {
-      let d = this.$moment().subtract(duration, 'day').startOf('day');
+      let d = this.$moment()
+        .subtract(duration, 'day')
+        .startOf('day');
       let count;
       let dow = [0, 0, 0, 0, 0, 0, 0];
       let tod = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       let tmpVisits = [];
 
       let visits = await browser.history.search({
-        text: "",
+        text: '',
         startTime: d.valueOf(),
         endTime: this.$moment().valueOf(),
-        maxResults: 1000000000
+        maxResults: 1000000000,
       });
 
       let index = visits.length - 1;
@@ -153,11 +155,13 @@ export default {
         domainList.push([domain, domains[domain]]);
       }
 
-      domainList.sort((a, b) => { return b[1] - a[1]});
+      domainList.sort((a, b) => {
+        return b[1] - a[1];
+      });
       this.topDomains = domainList.slice(0, 10);
       if (domainList.length < 10) {
         for (var i = domainList.length - 1; i < 10; i++) {
-          this.topDomains.push(["", 0]);
+          this.topDomains.push(['', 0]);
         }
       }
       this.dayOfWeek = dow;
@@ -167,30 +171,30 @@ export default {
     selectRange(range) {
       this.calculateStats(this.rangeValues[range]);
       this.$store.dispatch('updateRange', range);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-  .theme--light .ranges {
-    color: rgba(0, 0, 0, 0.5);
+.theme--light .ranges {
+  color: rgba(0, 0, 0, 0.5);
 
-    & span.active {
-      color: black;
-    }
+  & span.active {
+    color: black;
   }
+}
 
-  .theme--dark .ranges {
-    color: rgba(255, 255, 255, 0.5);
+.theme--dark .ranges {
+  color: rgba(255, 255, 255, 0.5);
 
-    & span.active {
-      color: white;
-    }
+  & span.active {
+    color: white;
   }
+}
 
-  .ranges span {
-    cursor: pointer;
-    padding: 0px 10px;
-  }
+.ranges span {
+  cursor: pointer;
+  padding: 0px 10px;
+}
 </style>
