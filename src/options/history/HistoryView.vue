@@ -1,146 +1,68 @@
 <template>
   <v-container fill-height fluid grid-list-md text-lg-center>
     <v-layout align-center wrap>
-      <v-flex
-        sm4
-        xs12
-        class="text-sm-left text-xs-center"
-      >
+      <v-flex sm4 xs12 class="text-sm-left text-xs-center">
         <v-btn @click="move('prev')">
-          <v-icon
-            left
-          >
+          <v-icon left>
             keyboard_arrow_left
           </v-icon>
           Prev
         </v-btn>
       </v-flex>
-      <v-flex
-        sm4
-        xs12
-        class="headline text-xs-center"
-      >
+      <v-flex sm4 xs12 class="headline text-xs-center">
         {{ month }}
       </v-flex>
-      <v-flex
-        sm4
-        xs12
-        class="text-sm-right text-xs-center"
-      >
-        <v-progress-circular
-          v-if="loadingVisits"
-          indeterminate
-          :color="themeColor"
-          :width="5"
-        ></v-progress-circular>
-        <v-btn @click="clearHistory.dialog = true" >
+      <v-flex sm4 xs12 class="text-sm-right text-xs-center">
+        <v-progress-circular v-if="loadingVisits" indeterminate :color="themeColor" :width="5"></v-progress-circular>
+        <v-btn v-show="!isDisabled" @click="setToday">
+          Today
+        </v-btn>
+        <v-btn @click="clearHistory.dialog = true">
           <v-icon>
             delete
           </v-icon>
         </v-btn>
         <v-btn @click="move('next')" :disabled="isDisabled">
           Next
-          <v-icon
-            right
-          >
+          <v-icon right>
             keyboard_arrow_right
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex
-        xs12
-        class="mb-3"
-      >
+      <v-flex xs12 class="mb-3">
         <v-sheet height="80vh">
           <HistoryCalendar ref="historycal" />
         </v-sheet>
       </v-flex>
     </v-layout>
     <HistorySheet />
-    <v-dialog
-      v-model="clearHistory.dialog"
-      max-width="400"
-    >
+    <v-dialog v-model="clearHistory.dialog" max-width="400">
       <v-card>
         <v-card-title class="headline justify-center">Clear History</v-card-title>
         <v-card-text>
-          <v-menu
-            v-model="clearHistory.start.menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
+          <v-menu v-model="clearHistory.start.menu" :close-on-content-click="false" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="clearHistory.start.date"
-                :color="themeColor"
-                label="Start date"
-                prepend-icon="event"
-                readonly
-                v-on="on"
-              ></v-text-field>
+              <v-text-field v-model="clearHistory.start.date" :color="themeColor" label="Start date" prepend-icon="event" readonly v-on="on"></v-text-field>
             </template>
-            <v-date-picker 
-              v-model="clearHistory.start.date" 
-              @input="clearHistory.start.menu = false" 
-              :color="themeColor"
-              :max="getDate(new Date())"
-              no-title
-              scrollable
-              >
+            <v-date-picker v-model="clearHistory.start.date" @input="clearHistory.start.menu = false" :color="themeColor" :max="getDate(new Date())" no-title scrollable>
             </v-date-picker>
           </v-menu>
-          <v-menu
-            v-model="clearHistory.end.menu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
+          <v-menu v-model="clearHistory.end.menu" :close-on-content-click="false" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="clearHistory.end.date"
-                :color="themeColor"
-                label="End date"
-                prepend-icon="event"
-                readonly
-                v-on="on"
-              ></v-text-field>
+              <v-text-field v-model="clearHistory.end.date" :color="themeColor" label="End date" prepend-icon="event" readonly v-on="on"></v-text-field>
             </template>
-            <v-date-picker 
-              v-model="clearHistory.end.date" 
-              @input="clearHistory.end.menu = false" 
-              :color="themeColor"
-              :max="getDate(new Date())"
-              no-title
-              scrollable
-              >
+            <v-date-picker v-model="clearHistory.end.date" @input="clearHistory.end.menu = false" :color="themeColor" :max="getDate(new Date())" no-title scrollable>
             </v-date-picker>
           </v-menu>
           <v-container grid-list-md text-xs-center>
             <v-layout row wrap>
               <v-flex xs6>
-                <v-btn
-                  @click="clearBrowsingHistory('all')"
-                  color="warning"
-                  block
-                >
+                <v-btn @click="clearBrowsingHistory('all')" color="warning" block>
                   Clear All
                 </v-btn>
               </v-flex>
               <v-flex xs6>
-                <v-btn
-                  @click="clearBrowsingHistory"
-                  color="info"
-                  block
-                >
+                <v-btn @click="clearBrowsingHistory" color="info" block>
                   Clear Range
                 </v-btn>
               </v-flex>
@@ -161,7 +83,7 @@ export default {
   name: 'HistoryView',
   components: {
     HistoryCalendar,
-    HistorySheet
+    HistorySheet,
   },
   data() {
     return {
@@ -170,16 +92,16 @@ export default {
         showMessage: false,
         end: {
           date: this.getDate(new Date()),
-          menu: false
+          menu: false,
         },
         start: {
           date: this.getDate(new Date()),
-          menu: false
-        }
+          menu: false,
+        },
       },
-      currentMonth: this.$moment().format("MMMM YYYY"),
+      currentMonth: this.$moment().format('MMMM YYYY'),
       loadingVisits: true,
-    }
+    };
   },
   async created() {
     this.$store.dispatch('changeMonth', this.$moment().format('YYYY-MM-DD'));
@@ -190,26 +112,30 @@ export default {
       return this.currentMonth == this.month;
     },
     month() {
-      return this.$moment(this.start).format("MMMM YYYY");
+      return this.$moment(this.start).format('MMMM YYYY');
     },
     start() {
       return this.$store.state.month;
     },
     themeColor() {
       return this.$store.state.themeColor;
-    }
+    },
   },
   methods: {
     async clearBrowsingHistory(allHistory) {
       if (allHistory == 'all') {
         await browser.history.deleteAll();
       } else {
-        let startTime = this.$moment(this.clearHistory.start.date).startOf('day').valueOf();
-        let endTime = this.$moment(this.clearHistory.end.date).endOf('day').valueOf();
+        let startTime = this.$moment(this.clearHistory.start.date)
+          .startOf('day')
+          .valueOf();
+        let endTime = this.$moment(this.clearHistory.end.date)
+          .endOf('day')
+          .valueOf();
 
         await browser.history.deleteRange({
           startTime,
-          endTime 
+          endTime,
         });
       }
 
@@ -234,7 +160,7 @@ export default {
       let m = this.$moment(this.start);
       let monthStart = m.startOf('month').valueOf();
       let monthEnd = m.endOf('month').valueOf();
-      
+
       let bucket = null;
       let d = null;
       let date = new Date(0);
@@ -243,26 +169,24 @@ export default {
       let dailyVisits = {};
 
       let visits = await browser.history.search({
-        text: "",
+        text: '',
         startTime: monthStart,
         endTime: monthEnd,
-        maxResults: 1000000000
+        maxResults: 1000000000,
       });
 
-      for (var i = visits.length - 1; i >= 0; i--) {        
+      for (var i = visits.length - 1; i >= 0; i--) {
         urlVisits = await browser.history.getVisits({
-          url: visits[i].url
+          url: visits[i].url,
         });
 
         for (var j = 0; j < urlVisits.length; j++) {
-          if (monthStart <= urlVisits[j].visitTime &&
-              urlVisits[j].visitTime <= monthEnd && 
-              urlVisits[j].transition != "reload") {
-              events.push({
-                url: visits[i].url,
-                title: visits[i].title,
-                visitTime: urlVisits[j].visitTime,
-              })
+          if (monthStart <= urlVisits[j].visitTime && urlVisits[j].visitTime <= monthEnd && urlVisits[j].transition != 'reload') {
+            events.push({
+              url: visits[i].url,
+              title: visits[i].title,
+              visitTime: urlVisits[j].visitTime,
+            });
           } else {
             break;
           }
@@ -285,28 +209,32 @@ export default {
           dailyVisits[d] = {
             pages: 1,
             views: 1,
-            visits: [events[i]]
-          }
+            visits: [events[i]],
+          };
         }
       }
 
-      let v = Object.keys(dailyVisits).map(e => [e, dailyVisits[e].views])
-      v.sort(function(a, b) {return a[1] - b[1] });
+      let v = Object.keys(dailyVisits).map(e => [e, dailyVisits[e].views]);
+      v.sort(function(a, b) {
+        return a[1] - b[1];
+      });
 
       for (var i = 0; i < v.length; i++) {
-        bucket = parseInt(( v[i][1] - v[0][1]) * 3 / ( v[v.length - 1][1] - v[0][1] ));
+        bucket = parseInt(((v[i][1] - v[0][1]) * 3) / (v[v.length - 1][1] - v[0][1]));
 
         if (bucket == 0) {
-          dailyVisits[v[i][0]].bucket = "low";
+          dailyVisits[v[i][0]].bucket = 'low';
         } else if (bucket == 1) {
-          dailyVisits[v[i][0]].bucket = "med";
+          dailyVisits[v[i][0]].bucket = 'med';
         } else {
-          dailyVisits[v[i][0]].bucket = "high";
+          dailyVisits[v[i][0]].bucket = 'high';
         }
       }
 
       for (var i in dailyVisits) {
-        dailyVisits[i].visits.sort(function(a, b) {return b.visitTime - a.visitTime });
+        dailyVisits[i].visits.sort(function(a, b) {
+          return b.visitTime - a.visitTime;
+        });
       }
 
       this.loadingVisits = false;
@@ -316,7 +244,13 @@ export default {
       this.loadingVisits = true;
       this.$refs.historycal.$refs.calendar[dir]();
       await this.getVisits();
-    }
-  }
+    },
+    async setToday() {
+      let today = this.$moment().format('YYYY-MM-DD');
+      this.$store.dispatch('changeMonth', today);
+      await this.getVisits();
+      this.$refs.historycal.getDayHistory({ date: today });
+    },
+  },
 };
 </script>
