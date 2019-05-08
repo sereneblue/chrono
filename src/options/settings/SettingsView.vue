@@ -19,7 +19,7 @@
       </template>
     </v-select>
     <v-switch v-model="darkModeEnabled" :color="themeColor" :label="`Dark Mode ${darkModeEnabled ? 'Enabled' : 'Disabled'}`"></v-switch>
-    <div class="title font-weight-medium">chrono v1.0.2 by <v-btn small href="https://github.com/sereneblue" target="_blank">sereneblue</v-btn></div>
+    <div class="title font-weight-medium">chrono v1.0.3 by <v-btn small href="https://github.com/sereneblue" target="_blank">sereneblue</v-btn></div>
   </v-container>
 </template>
 
