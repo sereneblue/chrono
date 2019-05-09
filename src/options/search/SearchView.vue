@@ -2,67 +2,41 @@
   <div>
     <v-container fluid grid-list-md>
       <v-flex>
-        <v-text-field
-          @keyup.enter="search"
-          v-model="query"
-          :color="themeColor"
-          :error-messages="errorMessage"
-          label="Search"
-          box
-        ></v-text-field>
-        <v-checkbox
-          v-model="groupByDomain"
-          :color="themeColor"
-          label="Group results by domain"
-        ></v-checkbox>
+        <v-text-field @keyup.enter="search" v-model="query" :color="themeColor" :error-messages="errorMessage" label="Search" box></v-text-field>
+        <v-checkbox v-model="groupByDomain" :color="themeColor" label="Group results by domain"></v-checkbox>
       </v-flex>
       <v-flex>
         <div v-if="results.length > 0 && !groupByDomain">
-          <v-subheader>{{ results.length }} {{results.length == 1 ? 'result' : 'results' }} found</v-subheader>
+          <v-subheader>{{ results.length }} {{ results.length == 1 ? 'result' : 'results' }} found</v-subheader>
           <v-list two-line>
-            <v-list-tile
-              v-for="result in results"
-              @click="openModal(result.url)"
-              :key="results.id"
-            >
+            <v-list-tile v-for="result in results" @click="openModal(result.url)" :key="results.id">
               <v-list-tile-avatar>
                 {{ result.lastVisitTime | formatDate }}
               </v-list-tile-avatar>
 
               <v-list-tile-content>
-                <v-list-tile-title class="subheading">{{ result.title ? result.title : "-- blank title --" }}</v-list-tile-title>
+                <v-list-tile-title class="subheading">{{ result.title ? result.title : '-- blank title --' }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
         </div>
         <div v-else-if="results.length > 0 && groupByDomain">
-          <v-subheader>{{ results.length }} {{groupedResults.length == 1 ? 'result' : 'results' }} found, {{ groupedResults.length }} {{ groupedResults.length == 1 ? 'domain' : 'domains' }} found</v-subheader>
+          <v-subheader>{{ resultsText }}</v-subheader>
           <v-list v-for="group in groupedResults" two-line subheader>
             <v-layout justify-space-between>
               <v-subheader>{{ group.host }}</v-subheader>
-              <v-btn 
-                v-if="group.host"
-                @click="openBrowsingDataModal(group.host)"
-                :color="themeColor"
-                right
-                small
-                style="align-self: center;"
-                >
+              <v-btn v-if="group.host" @click="openBrowsingDataModal(group.host)" :color="themeColor" right small style="align-self: center;">
                 Forget site
               </v-btn>
             </v-layout>
-            <v-list-tile
-              v-for="result in group.results"
-              @click="openModal(result.url)"
-              :key="result.id"
-            >
+            <v-list-tile v-for="result in group.results" @click="openModal(result.url)" :key="result.id">
               <v-list-tile-avatar>
                 {{ result.lastVisitTime | formatDate }}
               </v-list-tile-avatar>
 
               <v-list-tile-content>
-                <v-list-tile-title class="subheading">{{ result.title ? result.title : "-- blank title --" }}</v-list-tile-title>
+                <v-list-tile-title class="subheading">{{ result.title ? result.title : '-- blank title --' }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
@@ -77,43 +51,25 @@
     <v-snackbar v-model="snackbar" :timeout="1500" top>
       URL copied to clipboard!
     </v-snackbar>
-    <v-dialog
-      v-model="dialog"
-      max-width="400"
-    >
+    <v-dialog v-model="dialog" max-width="400">
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this URL</v-card-title>
         <v-card-text>
           <div style="padding-bottom: 10px;">{{ url.length > 100 ? url.slice(0, 100) + '...' : url }}</div>
-          <v-btn
-            @click="openLink"
-            :color="themeColor"
-            block
-          >
+          <v-btn @click="openLink" :color="themeColor" block>
             Open in new tab
           </v-btn>
-          <v-btn
-            @click="copy"
-            :color="themeColor"
-            block
-          >
+          <v-btn @click="copy" :color="themeColor" block>
             Copy to clipboard
           </v-btn>
-          <v-btn
-            @click="remove"
-            :color="themeColor"
-            block
-          >
+          <v-btn @click="remove" :color="themeColor" block>
             Delete from history
           </v-btn>
           <p v-if="showMessage" class="text-xs-center">Successfully removed URL from history!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="browsingData.dialog"
-      max-width="400"
-    >
+    <v-dialog v-model="browsingData.dialog" max-width="400">
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this site</v-card-title>
         <v-card-text>
@@ -121,11 +77,7 @@
           <v-checkbox v-model="browsingData.cookies" :color="themeColor" label="Delete cookies" block></v-checkbox>
           <v-checkbox v-model="browsingData.history" :color="themeColor" label="Delete history" block></v-checkbox>
 
-          <v-btn
-            @click="deleteBrowsingData"
-            :color="themeColor"
-            block
-          >
+          <v-btn @click="deleteBrowsingData" :color="themeColor" block>
             Clear browsing data
           </v-btn>
           <p v-if="showMessage" class="text-xs-center">Successfully cleared browsing data!</p>
@@ -136,25 +88,25 @@
 </template>
 
 <script>
-export default {  
+export default {
   name: 'SearchView',
   data() {
     return {
       browsingData: {
         cookies: false,
         dialog: false,
-        history: false
+        history: false,
       },
       dialog: false,
-      host: "",
-      errorMessage: "",
+      host: '',
+      errorMessage: '',
       groupedResults: [],
-      query: "",
+      query: '',
       results: [],
       showMessage: false,
       snackbar: false,
-      url: ""
-    }
+      url: '',
+    };
   },
   computed: {
     groupByDomain: {
@@ -163,17 +115,22 @@ export default {
       },
       set(value) {
         this.$store.dispatch('updateGroupByDomain', value);
-      }
+      },
+    },
+    resultsText() {
+      return `${this.results.length} ${this.groupedResults.length == 1 ? 'result' : 'results'}, ${this.groupedResults.length} ${
+        this.groupedResults.length == 1 ? 'domain' : 'domains'
+      } found`;
     },
     themeColor() {
       return this.$store.state.themeColor;
-    }
+    },
   },
   filters: {
     formatDate(ms) {
       let d = new Date(ms);
       return `${('0' + (d.getMonth() + 1)).slice(-2)}/${('0' + d.getDate()).slice(-2)}`;
-    }
+    },
   },
   methods: {
     copy() {
@@ -187,7 +144,7 @@ export default {
     async deleteBrowsingData() {
       if (this.browsingData.cookies) {
         await browser.browsingData.removeCookies({
-          hostnames: [this.host]
+          hostnames: [this.host],
         });
       }
 
@@ -195,14 +152,14 @@ export default {
         let visits = await browser.history.search({
           text: this.host,
           startTime: 0,
-          maxResults: 1000000000
+          maxResults: 1000000000,
         });
 
         // no bulk option??
         for (var i = 0; i < visits.length; i++) {
-          if ((new URL(visits[i].url)).hostname == this.host) {
+          if (new URL(visits[i].url).hostname == this.host) {
             await browser.history.deleteUrl({
-              url: visits[i].url
+              url: visits[i].url,
             });
           }
         }
@@ -219,7 +176,7 @@ export default {
       }, 1500);
     },
     openLink() {
-      browser.tabs.create({ active: false, url : this.url });
+      browser.tabs.create({ active: false, url: this.url });
 
       setTimeout(() => {
         this.dialog = false;
@@ -236,12 +193,12 @@ export default {
     parseQuery(query) {
       let q = {
         query: {
-          text: "",
+          text: '',
           startTime: 0,
-          maxResults: 250
+          maxResults: 250,
         },
-        error: "",
-        filters: []
+        error: '',
+        filters: [],
       };
 
       // get filters
@@ -265,7 +222,7 @@ export default {
           if (start) {
             q.query.startTime = start;
           } else {
-            q.error = "Invalid date range: start time";
+            q.error = 'Invalid date range: start time';
           }
         }
 
@@ -274,17 +231,17 @@ export default {
             q.query.startTime = 0;
             q.query.endTime = end;
           } else {
-            q.error = "Invalid date range: end time";
+            q.error = 'Invalid date range: end time';
           }
         }
 
         if (range[1] && range[2]) {
           if (start && !end) {
-            q.error = "Invalid date range: end time";
+            q.error = 'Invalid date range: end time';
           } else if (!start && end) {
-            q.error = "Invalid date range: start time";
+            q.error = 'Invalid date range: start time';
           } else {
-            q.error = "Invalid date range: start is >= end time";
+            q.error = 'Invalid date range: start is >= end time';
           }
         }
 
@@ -311,18 +268,15 @@ export default {
       let details = this.parseQuery(this.query);
       this.errorMessage = details.error;
 
-      if (details.error != "") {
+      if (details.error != '') {
         return;
       }
 
       let results = await browser.history.search(details.query);
 
       for (var i = 0; i < details.filters.length; i++) {
-        results = results.filter(visit => 
-                    !visit.url.toLowerCase().includes(details.filters[i]) && 
-                    !visit.title.toLowerCase().includes(details.filters[i])
-                  );
-      };
+        results = results.filter(visit => !visit.url.toLowerCase().includes(details.filters[i]) && !visit.title.toLowerCase().includes(details.filters[i]));
+      }
 
       let groups = {};
       let h = null;
@@ -334,13 +288,13 @@ export default {
         } else {
           groups[h] = [results[i]];
         }
-      };
+      }
 
       let hosts = Object.keys(groups);
       hosts.sort();
 
       this.groupedResults = hosts.map(host => {
-        return { host, results: groups[host] }
+        return { host, results: groups[host] };
       });
 
       this.results = results;
@@ -348,13 +302,13 @@ export default {
     validateDate(d, parseType) {
       if (d == undefined) return null;
 
-      let now =  this.$moment();
+      let now = this.$moment();
       let units = {
-        "2" : ["MM", "month"],
-        "4" : ["YYYY", "year"],
-        "6" : ["YYYYMM", "month"],
-        "8" : ["YYYYMMDD", "day"]
-      }
+        '2': ['MM', 'month'],
+        '4': ['YYYY', 'year'],
+        '6': ['YYYYMM', 'month'],
+        '8': ['YYYYMMDD', 'day'],
+      };
 
       let key = d.length.toString();
 
@@ -376,15 +330,15 @@ export default {
 
       return null;
     },
-  }
+  },
 };
 </script>
 
 <style>
-  /* Need to remove margin/padding on checkbox */
-  
-  .v-input--selection-controls {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
+/* Need to remove margin/padding on checkbox */
+
+.v-input--selection-controls {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 </style>
