@@ -11,6 +11,8 @@ Enhance Firefox's history capabilities with browsing history stats, improved sea
 
 chrono is available on [AMO](https://addons.mozilla.org/firefox/addon/chrono-ext) or visit the link above.
 
+Once installed, you can open chrono by using the keyboard shortcut: `CTRL + ALT + H`.
+
 ## Features
 
 #### Stats
