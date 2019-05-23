@@ -67,6 +67,9 @@ export default {
       return remaining >= 0 ? remaining : 0;
     },
     filteredHistory() {
+      this.$nextTick(() => {
+        document.querySelector('#dayHistory').scrollTop = 0;
+      });
       return this.query ? this.history.filter(h => h.url.toLowerCase().includes(this.query) || h.title.toLowerCase().includes(this.query)) : this.history;
     },
     history() {

@@ -7,21 +7,23 @@
 <script>
 export default {
   name: 'VisitsTrend',
-  props: ['data'],
+  props: ['data', 'unit'],
   data() {
     return {
-      chart: null
-    }
+      chart: null,
+    };
   },
   computed: {
     color() {
-      return this.$store.state.darkModeEnabled ? {
-        font: 'white',
-        grid: 'rgba(255, 255, 255, 0.2)'
-      } : {
-        font: 'black',
-        grid: 'rgba(0, 0, 0, 0.2)'
-      };
+      return this.$store.state.darkModeEnabled
+        ? {
+            font: 'white',
+            grid: 'rgba(255, 255, 255, 0.2)',
+          }
+        : {
+            font: 'black',
+            grid: 'rgba(0, 0, 0, 0.2)',
+          };
     },
     darkModeEnabled() {
       return this.$store.state.darkModeEnabled;
@@ -29,86 +31,92 @@ export default {
     themeColor() {
       let theme = this.$store.state.themeColor;
 
-      if (theme.includes("-")) {
-        let parts = theme.split('-'); 
+      if (theme.includes('-')) {
+        let parts = theme.split('-');
         theme = `${parts[0]}${parts[1].charAt(0).toUpperCase() + parts[1].slice(1)}`;
       }
 
       return theme;
-    }
+    },
   },
   methods: {
-    renderChart: function () {
+    renderChart: function() {
       let labels = this.data.map(d => d[0]);
       let dataset = this.data.map(d => d[1]);
 
-      let ctx = document.getElementById("visits");
+      let ctx = document.getElementById('visits');
       this.chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: labels,
-          datasets: [{
-            data: dataset,
-            type: 'line',
-            pointRadius: 2,
-            backgroundColor: this.$colors[this.themeColor].base,
-            borderColor: this.$colors[this.themeColor].darken3,
-            borderWidth: 2,
-            hoverBackgroundColor: this.$colors[this.themeColor].lighten1,
-            hoverBorderColor: this.$colors[this.themeColor].darken3,
-            fill: true
-          }]
+          datasets: [
+            {
+              data: dataset,
+              type: 'line',
+              pointRadius: 2,
+              backgroundColor: this.$colors[this.themeColor].base,
+              borderColor: this.$colors[this.themeColor].darken3,
+              borderWidth: 2,
+              hoverBackgroundColor: this.$colors[this.themeColor].lighten1,
+              hoverBorderColor: this.$colors[this.themeColor].darken3,
+              fill: true,
+            },
+          ],
         },
         options: {
           legend: {
-            display: false
+            display: false,
           },
           maintainAspectRatio: false,
           scales: {
-            xAxes: [{
-              type: 'time',
-              position: 'bottom',
-              gridLines: {
-                color: this.color.grid
-              },
-              ticks: {
-                fontColor: this.color.font
-              },
-              time: {
-                displayFormats: {
-                  month: 'MMM YYYY'
+            xAxes: [
+              {
+                type: 'time',
+                position: 'bottom',
+                gridLines: {
+                  color: this.color.grid,
                 },
-                tooltipFormat: 'MM/DD/YYYY',
-                unit: 'month',
-              }
-            }],
-            yAxes: [{
-              gridLines: {
-                color: this.color.grid
+                ticks: {
+                  fontColor: this.color.font,
+                },
+                time: {
+                  displayFormats: {
+                    month: 'MMM YYYY',
+                  },
+                  tooltipFormat: 'MM/DD/YYYY',
+                  unit: this.unit,
+                },
               },
-              scaleLabel: {
-                display: true,
-                fontColor: this.color.font,
-                labelString: 'visits'
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  color: this.color.grid,
+                },
+                scaleLabel: {
+                  display: true,
+                  fontColor: this.color.font,
+                  labelString: 'visits',
+                },
+                ticks: {
+                  fontColor: this.color.font,
+                },
               },
-              ticks: {
-                fontColor: this.color.font
-              }
-            }]
-          }
-        }
+            ],
+          },
+        },
       });
-    }
+    },
   },
   watch: {
     data: {
-      handler (val, oldVal) {
+      handler(val, oldVal) {
         if (this.chart) {
-          this.chart.destroy()
+          this.chart.destroy();
         }
-        
+
         this.renderChart();
-      }
+      },
     },
     darkModeEnabled: {
       handler(val, oldVal) {
@@ -123,20 +131,19 @@ export default {
         this.chart.options.scales.yAxes[0].ticks.minor.fontColor = this.color.font;
         this.chart.options.scales.yAxes[0].scaleLabel.fontColor = this.color.font;
         this.chart.update();
-      }
+      },
     },
     themeColor: {
-      handler (val, oldVal) {
+      handler(val, oldVal) {
         this.chart.data.datasets[0].backgroundColor = this.$colors[this.themeColor].base;
         this.chart.data.datasets[0].borderColor = this.$colors[this.themeColor].darken3;
         this.chart.data.datasets[0].hoverBackgroundColor = this.$colors[this.themeColor].lighten1;
         this.chart.data.datasets[0].hoverBorderColor = this.$colors[this.themeColor].darken3;
         this.chart.update();
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

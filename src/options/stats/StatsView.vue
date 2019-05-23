@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="ranges text-xs-center">
+      <span @click="selectRange('1w')" :class="{ active: range == '1w', 'body-2': true }">1 week</span> |
       <span @click="selectRange('1m')" :class="{ active: range == '1m', 'body-2': true }">1 month</span> |
       <span @click="selectRange('3m')" :class="{ active: range == '3m', 'body-2': true }">3 months</span> |
       <span @click="selectRange('6m')" :class="{ active: range == '6m', 'body-2': true }">6 months</span> |
@@ -27,7 +28,7 @@
         <v-flex lg8>
           <v-card min-height="100%">
             <v-subheader>Browsing History (Past {{ browserHistorySubheader }})</v-subheader>
-            <VisitsTrend :data="visits" />
+            <VisitsTrend :data="visits" :unit="unit" />
           </v-card>
         </v-flex>
       </v-layout>
@@ -72,6 +73,7 @@ export default {
         '6m': 180,
         '3m': 90,
         '1m': 30,
+        '1w': 7,
       },
       timeOfDay: [],
       topDomains: [],
@@ -86,12 +88,17 @@ export default {
         return '6 months';
       } else if (this.range == '3m') {
         return '3 months';
-      } else {
+      } else if (this.range == '1m') {
         return 'month';
+      } else {
+        return 'week';
       }
     },
     range() {
       return this.$store.state.statsRange;
+    },
+    unit() {
+      return ['1w', '1m'].includes(this.range) ? 'day' : 'month';
     },
   },
   methods: {
