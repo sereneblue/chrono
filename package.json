@@ -19,7 +19,7 @@
     "chart.js": "^2.7.3",
     "material-design-icons-iconfont": "^4.0.5",
     "typeface-roboto": "0.0.54",
-    "vue": "^2.5.17",
+    "vue": "^2.6.10",
     "vue-router": "^3.0.1",
     "vuetify": "^1.5.5",
     "vuex": "^3.0.1"
@@ -56,7 +56,7 @@
     "pretty-quick": "^1.8.0",
     "sass-loader": "^7.1.0",
     "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "^2.6.10",
     "webpack": "^4.20.2",
     "webpack-chrome-extension-reloader": "^0.8.3",
     "webpack-cli": "^3.1.2",
