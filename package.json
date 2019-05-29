@@ -16,7 +16,7 @@
     "watch:dev": "cross-env HMR=true npm run build:dev -- --watch"
   },
   "dependencies": {
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.8.0",
     "material-design-icons-iconfont": "^4.0.5",
     "typeface-roboto": "0.0.54",
     "vue": "^2.5.17",
