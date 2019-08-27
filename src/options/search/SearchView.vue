@@ -73,7 +73,7 @@
           <v-btn @click="remove" :color="themeColor" block>
             Delete from history
           </v-btn>
-          <p v-if="showMessage" class="text-xs-center">Successfully removed URL from history!</p>
+          <p v-if="showMessage" class="text-center">Successfully removed URL from history!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -85,10 +85,10 @@
           <v-checkbox v-model="browsingData.cookies" :color="themeColor" label="Delete cookies" block></v-checkbox>
           <v-checkbox v-model="browsingData.history" :color="themeColor" label="Delete history" block></v-checkbox>
 
-          <v-btn @click="deleteBrowsingData" :color="themeColor" block>
+          <v-btn @click="deleteBrowsingData" :loading="loading" :color="themeColor" block>
             Clear browsing data
           </v-btn>
-          <p v-if="showMessage" class="text-xs-center">Successfully cleared browsing data!</p>
+          <p v-if="showMessage" class="text-center">Successfully cleared browsing data!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -109,6 +109,7 @@ export default {
       host: '',
       errorMessage: '',
       groupedResults: [],
+      loading: false,
       noResults: false,
       query: '',
       results: [],
@@ -151,6 +152,7 @@ export default {
       }, 1000);
     },
     async deleteBrowsingData() {
+      this.loading = true;
       if (this.browsingData.cookies) {
         await browser.browsingData.removeCookies({
           hostnames: [this.host],
@@ -176,13 +178,14 @@ export default {
 
       await this.search();
       this.showMessage = true;
+      this.loading = false;
 
       setTimeout(() => {
         this.browsingData.dialog = false;
         this.browsingData.cookies = false;
         this.browsingData.history = false;
         this.showMessage = false;
-      }, 1500);
+      }, 1250);
     },
     openLink() {
       browser.tabs.create({ active: false, url: this.url });
