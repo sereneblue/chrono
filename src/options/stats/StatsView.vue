@@ -13,7 +13,7 @@
           <v-card elevation="3">
             <v-list subheader>
               <v-subheader class="subtitle-2">Top Domains</v-subheader>
-              <v-list-item v-for="domain in topDomains">
+              <v-list-item v-for="domain in topDomains" :key="domain[0]">
                 <v-list-item-content>
                   <v-list-item-title>{{ domain[0] }} </v-list-item-title>
                 </v-list-item-content>

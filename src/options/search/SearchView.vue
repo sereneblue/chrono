@@ -28,7 +28,7 @@
           </div>
           <div v-else-if="results.length > 0 && groupByDomain">
             <v-subheader>{{ resultsText }}</v-subheader>
-            <v-list v-for="group in groupedResults" two-line subheader>
+            <v-list v-for="group in groupedResults" :key="group.host" two-line subheader>
               <v-layout justify-space-between>
                 <v-subheader class="font-weight-medium" style="font-size: 18px;">
                   {{ group.host }}
