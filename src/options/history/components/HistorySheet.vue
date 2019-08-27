@@ -1,26 +1,26 @@
 <template>
-  <div class="text-xs-center">
+  <div class="text-center">
     <v-bottom-sheet scrollable v-model="open">
       <v-card>
         <v-card-title>
           Visits for {{ historyDate }}
-          <v-text-field v-model="query" class="ml-4" label="Search..." :color="themeColor"></v-text-field>
+          <v-text-field v-model="query" single-line :color="themeColor" class="ml-4" label="Search..." />
         </v-card-title>
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-text>
           <v-list id="dayHistory" dense two-line style="max-height: 50vh; overflow-y: auto;">
-            <v-list-tile v-for="h in filteredHistory" @click="openModal(h.url)">
-              <v-list-tile-avatar size="50">
+            <v-list-item dense v-for="h in filteredHistory" @click="openModal(h.url)" :key="h.visitTime">
+              <v-list-item-avatar>
                 {{ h.visitTime | to24Hours }}
-              </v-list-tile-avatar>
+              </v-list-item-avatar>
 
-              <v-list-tile-content>
-                <v-list-tile-title class="subheading">{{ h.title ? h.title : '-- blank title --' }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ h.url }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile v-for="i in fillLength"> </v-list-tile>
+              <v-list-item-content>
+                <v-list-item-title class="font-weight-regular" style="font-size: 20px">{{ h.title ? h.title : '-- No title --' }}</v-list-item-title>
+                <v-list-item-subtitle class="mt-2" style="font-size: 16px">{{ h.url }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-for="i in fillLength" />
           </v-list>
         </v-card-text>
       </v-card>
@@ -32,17 +32,17 @@
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this URL</v-card-title>
         <v-card-text>
-          <div style="padding-bottom: 10px;">{{ url.length > 100 ? url.slice(0, 100) + '...' : url }}</div>
+          <div style="padding-bottom: 10px; font-size: 18px;">{{ url.length > 100 ? url.slice(0, 100) + '...' : url }}</div>
           <v-btn @click="openLink" :color="themeColor" block>
             Open in new tab
           </v-btn>
-          <v-btn @click="copy" :color="themeColor" block>
+          <v-btn @click="copy" class="my-2" :color="themeColor" block>
             Copy to clipboard
           </v-btn>
           <v-btn @click="remove" :color="themeColor" block>
             Delete from history
           </v-btn>
-          <p v-if="showMessage" class="text-xs-center">Successfully removed URL from history!</p>
+          <p v-if="showMessage" class="text-center">Successfully removed URL from history!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
