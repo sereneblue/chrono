@@ -1,51 +1,51 @@
 <template>
   <div>
-    <div class="ranges text-xs-center">
-      <span @click="selectRange('1w')" :class="{ active: range == '1w', 'body-2': true }">1 week</span> |
-      <span @click="selectRange('1m')" :class="{ active: range == '1m', 'body-2': true }">1 month</span> |
-      <span @click="selectRange('3m')" :class="{ active: range == '3m', 'body-2': true }">3 months</span> |
-      <span @click="selectRange('6m')" :class="{ active: range == '6m', 'body-2': true }">6 months</span> |
-      <span @click="selectRange('1y')" :class="{ active: range == '1y', 'body-2': true }">1 year</span>
+    <div class="ranges text-center">
+      <span @click="selectRange('1w')" :class="{ active: range == '1w', 'subtitle-2': true }">1 week</span> |
+      <span @click="selectRange('1m')" :class="{ active: range == '1m', 'subtitle-2': true }">1 month</span> |
+      <span @click="selectRange('3m')" :class="{ active: range == '3m', 'subtitle-2': true }">3 months</span> |
+      <span @click="selectRange('6m')" :class="{ active: range == '6m', 'subtitle-2': true }">6 months</span> |
+      <span @click="selectRange('1y')" :class="{ active: range == '1y', 'subtitle-2': true }">1 year</span>
     </div>
-    <v-container fluid grid-list-md text-lg-center>
-      <v-layout row wrap>
-        <v-flex lg4>
-          <v-card>
+    <v-container fluid grid-list-md>
+      <v-row dense>
+        <v-col lg="4">
+          <v-card elevation="3">
             <v-list subheader>
-              <v-subheader>Top Domains</v-subheader>
-              <v-list-tile v-for="domain in topDomains">
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ domain[0] }} </v-list-tile-title>
-                </v-list-tile-content>
+              <v-subheader class="subtitle-2">Top Domains</v-subheader>
+              <v-list-item v-for="domain in topDomains">
+                <v-list-item-content>
+                  <v-list-item-title>{{ domain[0] }} </v-list-item-title>
+                </v-list-item-content>
 
-                <v-list-tile-action v-if="domain[1]">
+                <v-list-item-action v-if="domain[1]">
                   <v-chip label>{{ domain[1] }} visits</v-chip>
-                </v-list-tile-action>
-              </v-list-tile>
+                </v-list-item-action>
+              </v-list-item>
             </v-list>
           </v-card>
-        </v-flex>
-        <v-flex lg8>
-          <v-card min-height="100%">
-            <v-subheader>Browsing History (Past {{ browserHistorySubheader }})</v-subheader>
+        </v-col>
+        <v-col lg="8">
+          <v-card min-height="100%" elevation="3">
+            <v-subheader class="subtitle-2">Browsing History (Past {{ browserHistorySubheader }})</v-subheader>
             <VisitsTrend :data="visits" :unit="unit" />
           </v-card>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex xs6>
-          <v-card min-height="100%">
-            <v-subheader>Day of Week</v-subheader>
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col sm="6">
+          <v-card min-height="100%" elevation="3">
+            <v-subheader class="subtitle-2">Day of Week</v-subheader>
             <DayOfWeekTrend :data="dayOfWeek" />
           </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card>
-            <v-subheader>Time of Day (hour)</v-subheader>
+        </v-col>
+        <v-col sm="6">
+          <v-card elevation="3">
+            <v-subheader class="subtitle-2">Time of Day (hour)</v-subheader>
             <TimeOfDayTrend :data="timeOfDay" />
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -203,5 +203,9 @@ export default {
 .ranges span {
   cursor: pointer;
   padding: 0px 10px;
+}
+
+.v-list-item__action {
+  margin: 0;
 }
 </style>
