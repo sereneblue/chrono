@@ -1,29 +1,23 @@
 <template>
-  <v-app v-if="loaded" :dark="darkModeEnabled">
-    <v-tabs
-      v-model="activeTab"
-      centered
-      fixed-tabs
-      :color="theme"
-      :slider-color="darkModeEnabled ? 'white' : 'black'"
-    >
+  <v-app v-if="loaded">
+    <v-tabs v-model="activeTab" centered :background-color="theme" :color="darkModeEnabled ? 'white' : 'black'">
       <v-tab key="history">
-        <v-icon left small>history</v-icon>
+        <v-icon left small>mdi-history</v-icon>
         History
       </v-tab>
 
       <v-tab key="search">
-        <v-icon left small>search</v-icon>
+        <v-icon left small>mdi-magnify</v-icon>
         Search
       </v-tab>
 
       <v-tab key="stats">
-        <v-icon left small>trending_up</v-icon>
+        <v-icon left small>mdi-trending-up</v-icon>
         Stats
       </v-tab>
 
       <v-tab key="settings">
-        <v-icon left small>settings</v-icon>
+        <v-icon left small>mdi-settings</v-icon>
         Settings
       </v-tab>
 
@@ -56,7 +50,7 @@
 
 <script>
 import HistoryView from './history/HistoryView.vue';
-import SearchView from './search/SearchView.vue'; 
+import SearchView from './search/SearchView.vue';
 import SettingsView from './settings/SettingsView.vue';
 import StatsView from './stats/StatsView.vue';
 
@@ -66,19 +60,20 @@ export default {
     HistoryView,
     SearchView,
     SettingsView,
-    StatsView
+    StatsView,
   },
   created() {
     this.$store.dispatch('updateSettings');
+    this.$vuetify.theme.dark = this.$store.state.darkModeEnabled;
   },
   data() {
     return {
       tabs: {
-        'history': 0,
-        'search': 1,
-        'stats': 2
-      }
-    }
+        history: 0,
+        search: 1,
+        stats: 2,
+      },
+    };
   },
   computed: {
     activeTab: {
@@ -87,7 +82,7 @@ export default {
       },
       set() {
         // do nothing
-      }
+      },
     },
     darkModeEnabled() {
       return this.$store.state.darkModeEnabled;
@@ -97,10 +92,26 @@ export default {
     },
     theme() {
       return this.$store.state.themeColor;
-    }
-  }
+    },
+  },
+  watch: {
+    darkModeEnabled: {
+      handler(val) {
+        this.$vuetify.theme.dark = val;
+      },
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style>
+.container--fluid {
+  padding-top: 15px !important;
+  padding-left: 35px !important;
+  padding-right: 35px !important;
+}
+
+.theme--dark.v-tabs-items {
+  background-color: transparent !important;
+}
 </style>
