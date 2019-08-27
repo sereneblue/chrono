@@ -1,52 +1,60 @@
 <template>
   <div>
-    <v-container fluid grid-list-md>
-      <v-flex>
-        <v-text-field @keyup.enter="search" v-model="query" :color="themeColor" :error-messages="errorMessage" label="Search" box></v-text-field>
-        <v-checkbox v-model="groupByDomain" :color="themeColor" label="Group results by domain"></v-checkbox>
-      </v-flex>
-      <v-flex>
-        <div v-if="results.length > 0 && !groupByDomain">
-          <v-subheader>{{ results.length }} {{ results.length == 1 ? 'result' : 'results' }} found</v-subheader>
-          <v-list two-line>
-            <v-list-tile v-for="result in results" @click="openModal(result.url)" :key="results.id">
-              <v-list-tile-avatar>
-                {{ result.lastVisitTime | formatDate }}
-              </v-list-tile-avatar>
+    <v-container fluid>
+      <v-row>
+        <v-col sm="12">
+          <v-text-field :value="query" @change="q => (query = q)" @keyup.enter="search" :color="themeColor" :error-messages="errorMessage" label="Search" filled />
+        </v-col>
+        <v-col class="py-0">
+          <v-checkbox v-model="groupByDomain" :color="themeColor" label="Group results by domain" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col sm="12">
+          <div v-if="results.length > 0 && !groupByDomain">
+            <v-subheader>{{ results.length }} {{ results.length == 1 ? 'result' : 'results' }} found</v-subheader>
+            <v-list two-line>
+              <v-list-item v-for="result in results" @click="openModal(result.url)" :key="results.id">
+                <v-list-item-avatar>
+                  {{ result.lastVisitTime | formatDate }}
+                </v-list-item-avatar>
 
-              <v-list-tile-content>
-                <v-list-tile-title class="subheading">{{ result.title ? result.title : '-- blank title --' }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </div>
-        <div v-else-if="results.length > 0 && groupByDomain">
-          <v-subheader>{{ resultsText }}</v-subheader>
-          <v-list v-for="group in groupedResults" two-line subheader>
-            <v-layout justify-space-between>
-              <v-subheader>{{ group.host }}</v-subheader>
-              <v-btn v-if="group.host" @click="openBrowsingDataModal(group.host)" :color="themeColor" right small style="align-self: center;">
-                Forget site
-              </v-btn>
-            </v-layout>
-            <v-list-tile v-for="result in group.results" @click="openModal(result.url)" :key="result.id">
-              <v-list-tile-avatar>
-                {{ result.lastVisitTime | formatDate }}
-              </v-list-tile-avatar>
+                <v-list-item-content>
+                  <v-list-item-title class="subheading">{{ result.title ? result.title : '-- No title --' }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ result.url }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </div>
+          <div v-else-if="results.length > 0 && groupByDomain">
+            <v-subheader>{{ resultsText }}</v-subheader>
+            <v-list v-for="group in groupedResults" two-line subheader>
+              <v-layout justify-space-between>
+                <v-subheader class="font-weight-medium" style="font-size: 18px;">
+                  {{ group.host }}
+                  <v-btn v-if="group.host" @click="openBrowsingDataModal(group.host)" :color="themeColor" class="ml-2" small style="align-self: center;">
+                    Forget
+                  </v-btn>
+                </v-subheader>
+              </v-layout>
+              <v-list-item v-for="result in group.results" @click="openModal(result.url)" :key="result.id">
+                <v-list-item-avatar>
+                  {{ result.lastVisitTime | formatDate }}
+                </v-list-item-avatar>
 
-              <v-list-tile-content>
-                <v-list-tile-title class="subheading">{{ result.title ? result.title : '-- blank title --' }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ result.url }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-          </v-list>
-        </div>
-        <div v-else-if="results.length == 0">
-          <v-subheader>No results found</v-subheader>
-        </div>
-      </v-flex>
+                <v-list-item-content>
+                  <v-list-item-title class="subheading">{{ result.title ? result.title : '-- No title --' }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ result.url }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider></v-divider>
+            </v-list>
+          </div>
+          <div v-else-if="noResults">
+            <v-subheader>No results found</v-subheader>
+          </div>
+        </v-col>
+      </v-row>
     </v-container>
     <v-snackbar v-model="snackbar" :timeout="1500" top>
       URL copied to clipboard!
@@ -59,7 +67,7 @@
           <v-btn @click="openLink" :color="themeColor" block>
             Open in new tab
           </v-btn>
-          <v-btn @click="copy" :color="themeColor" block>
+          <v-btn @click="copy" class="my-2" :color="themeColor" block>
             Copy to clipboard
           </v-btn>
           <v-btn @click="remove" :color="themeColor" block>
@@ -73,7 +81,7 @@
       <v-card>
         <v-card-title class="headline justify-center">Choose an action for this site</v-card-title>
         <v-card-text>
-          <div style="padding-bottom: 10px;">{{ host.length > 100 ? host.slice(0, 100) + '...' : host }}</div>
+          <div style="padding-bottom: 10px; font-size: 18px;">{{ host.length > 100 ? host.slice(0, 100) + '...' : host }}</div>
           <v-checkbox v-model="browsingData.cookies" :color="themeColor" label="Delete cookies" block></v-checkbox>
           <v-checkbox v-model="browsingData.history" :color="themeColor" label="Delete history" block></v-checkbox>
 
@@ -101,6 +109,7 @@ export default {
       host: '',
       errorMessage: '',
       groupedResults: [],
+      noResults: false,
       query: '',
       results: [],
       showMessage: false,
@@ -298,6 +307,7 @@ export default {
       });
 
       this.results = results;
+      this.noResults = !results.length;
     },
     validateDate(d, parseType) {
       if (d == undefined) return null;
@@ -340,5 +350,9 @@ export default {
 .v-input--selection-controls {
   margin-top: 0 !important;
   padding-top: 0 !important;
+}
+
+.v-input__slot {
+  margin-bottom: 0 !important;
 }
 </style>
