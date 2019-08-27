@@ -11,7 +11,7 @@
     </v-select>
     <v-select :color="themeColor" :items="colorsList" :value="currentTheme" @change="changeThemeColor" label="Theme color">
       <template slot="item" slot-scope="data">
-        <v-icon large :color="getBaseColor(data.item)">label</v-icon>&nbsp;&nbsp;{{ data.item | toTitleCase }}
+        <v-icon large :color="getBaseColor(data.item)">mdi-label</v-icon>&nbsp;&nbsp;{{ data.item | toTitleCase }}
       </template>
 
       <template slot="selection" slot-scope="data">
