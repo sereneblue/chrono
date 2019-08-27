@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>
           Visits for {{ historyDate }}
-          <v-text-field v-model="query" single-line :color="themeColor" class="ml-4" label="Search..." />
+          <v-text-field :value="searchQuery" @change="q => (searchQuery = q)" @keyup.enter="search" single-line :color="themeColor" class="ml-4" label="Search..." />
         </v-card-title>
         <v-divider />
 
@@ -68,9 +68,42 @@ export default {
     },
     filteredHistory() {
       this.$nextTick(() => {
-        document.querySelector('#dayHistory').scrollTop = 0;
+        let el = document.querySelector('#dayHistory');
+        if (el) el.scrollTop = 0;
       });
-      return this.query ? this.history.filter(h => h.url.toLowerCase().includes(this.query) || h.title.toLowerCase().includes(this.query)) : this.history;
+
+      let query = this.query;
+
+      if (query) {
+        let tmpHistory = [...this.history];
+        let filters = [];
+
+        let negation = query.match(/(?:^|\W)\-(\w+)(?!\w)/g);
+        if (negation) {
+          for (var i = 0; i < negation.length; i++) {
+            filters.push(negation[i].replace(/\s?-/g, '').toLowerCase());
+
+            // remove filter from query
+            query = query.replace(negation[i], '');
+          }
+        }
+
+        query = query.replace(/\s-$/, '').trim();
+        tmpHistory = tmpHistory.filter(h => h.url.toLowerCase().indexOf(query) > -1 || h.title.toLowerCase().indexOf(query) > -1);
+
+        for (var i = 0; i < filters.length; i++) {
+          tmpHistory = tmpHistory.filter(h => {
+            if (h.url.toLowerCase().indexOf(filters[i]) > -1) return false;
+            if (h.title.toLowerCase().indexOf(filters[i]) > -1) return false;
+
+            return true;
+          });
+        }
+
+        return tmpHistory;
+      } else {
+        return this.history;
+      }
     },
     history() {
       if (!this.$store.state.viewDay) return [];
@@ -137,6 +170,9 @@ export default {
         this.dialog = false;
         this.showMessage = false;
       }, 1500);
+    },
+    search() {
+      this.query = this.searchQuery;
     },
   },
 };
