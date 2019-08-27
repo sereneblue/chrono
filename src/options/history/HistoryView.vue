@@ -1,74 +1,90 @@
 <template>
-  <v-container fill-height fluid grid-list-md text-lg-center>
-    <v-layout align-center wrap>
-      <v-flex sm4 xs12 class="text-sm-left text-xs-center">
+  <v-container fluid>
+    <v-row>
+      <v-col lg="4" class="text-left">
         <v-btn @click="move('prev')">
           <v-icon left>
-            keyboard_arrow_left
+            mdi-chevron-left
           </v-icon>
           Prev
         </v-btn>
-      </v-flex>
-      <v-flex sm4 xs12 class="headline text-xs-center">
+      </v-col>
+      <v-col lg="4" class="headline text-center">
         {{ month }}
-      </v-flex>
-      <v-flex sm4 xs12 class="text-sm-right text-xs-center">
+      </v-col>
+      <v-col lg="4" class="text-right">
         <v-progress-circular v-if="loadingVisits" indeterminate :color="themeColor" :width="5"></v-progress-circular>
         <v-btn v-show="!isDisabled" @click="setToday">
           Today
         </v-btn>
         <v-btn @click="clearHistory.dialog = true">
           <v-icon>
-            delete
+            mdi-delete
           </v-icon>
         </v-btn>
         <v-btn @click="move('next')" :disabled="isDisabled">
           Next
           <v-icon right>
-            keyboard_arrow_right
+            mdi-chevron-right
           </v-icon>
         </v-btn>
-      </v-flex>
-      <v-flex xs12 class="mb-3">
+      </v-col>
+      <v-col sm="12" class="mb-3">
         <v-sheet height="80vh">
           <HistoryCalendar ref="historycal" />
         </v-sheet>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
     <HistorySheet />
     <v-dialog v-model="clearHistory.dialog" max-width="400">
       <v-card>
         <v-card-title class="headline justify-center">Clear History</v-card-title>
         <v-card-text>
-          <v-menu v-model="clearHistory.start.menu" :close-on-content-click="false" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+          <v-menu v-model="clearHistory.start.menu" :close-on-content-click="false" nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field v-model="clearHistory.start.date" :color="themeColor" label="Start date" prepend-icon="event" readonly v-on="on"></v-text-field>
+              <v-text-field
+                @change="input => (clearHistory.start.date = input)"
+                :value="clearHistory.start.date"
+                :color="themeColor"
+                label="Start date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-on="on"
+              />
             </template>
             <v-date-picker v-model="clearHistory.start.date" @input="clearHistory.start.menu = false" :color="themeColor" :max="getDate(new Date())" no-title scrollable>
             </v-date-picker>
           </v-menu>
-          <v-menu v-model="clearHistory.end.menu" :close-on-content-click="false" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+          <v-menu v-model="clearHistory.end.menu" :close-on-content-click="false" nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
             <template v-slot:activator="{ on }">
-              <v-text-field v-model="clearHistory.end.date" :color="themeColor" label="End date" prepend-icon="event" readonly v-on="on"></v-text-field>
+              <v-text-field
+                @change="input => (clearHistory.end.date = input)"
+                :value="clearHistory.end.date"
+                :color="themeColor"
+                label="End date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-on="on"
+              />
             </template>
             <v-date-picker v-model="clearHistory.end.date" @input="clearHistory.end.menu = false" :color="themeColor" :max="getDate(new Date())" no-title scrollable>
             </v-date-picker>
           </v-menu>
-          <v-container grid-list-md text-xs-center>
-            <v-layout row wrap>
-              <v-flex xs6>
+          <v-container>
+            <v-row>
+              <v-col lg="6">
                 <v-btn @click="clearBrowsingHistory('all')" color="warning" block>
                   Clear All
                 </v-btn>
-              </v-flex>
-              <v-flex xs6>
+              </v-col>
+              <v-col lg="6">
                 <v-btn @click="clearBrowsingHistory" color="info" block>
                   Clear Range
                 </v-btn>
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </v-container>
-          <p v-if="clearHistory.showMessage" class="text-xs-center">Successfully cleared history!</p>
+          <p v-if="clearHistory.showMessage" class="text-center">Successfully cleared history!</p>
         </v-card-text>
       </v-card>
     </v-dialog>
