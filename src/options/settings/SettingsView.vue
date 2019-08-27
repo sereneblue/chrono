@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid grid-list-md text-lg-center>
+  <v-container fluid text-center>
     <v-select :color="themeColor" :items="tabs" :value="currentTab" @change="updateMainTab" label="Main tab">
       <template slot="item" slot-scope="data">
         {{ data.item | toTitleCase }}
@@ -20,7 +20,8 @@
     </v-select>
     <v-switch v-model="darkModeEnabled" :color="themeColor" :label="`Dark Mode ${darkModeEnabled ? 'Enabled' : 'Disabled'}`"></v-switch>
     <div class="headline mb-2">chrono can be opened by pressing CTRL + ALT + H</div>
-    <div class="title font-weight-medium">v1.0.5 by sereneblue<v-btn href="https://github.com/sereneblue/chrono" target="_blank">Source code</v-btn></div>
+    <div class="title font-weight-medium">v1.0.5 by sereneblue</div>
+    <v-btn href="https://github.com/sereneblue/chrono" target="_blank">View source code</v-btn>
   </v-container>
 </template>
 
