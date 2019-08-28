@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const { version } = require('./package.json');
 
@@ -11,8 +12,8 @@ const config = {
   mode: process.env.NODE_ENV,
   context: __dirname + '/src',
   entry: {
-    'background': './background.js',
-    'main': './options/options.js'
+    background: './background.js',
+    main: './options/options.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -52,13 +53,15 @@ const config = {
         },
       },
       {
-        test: /\.(woff|woff2|eot|ttf)$/,
-        loader: 'file-loader?name=fonts/[name].[ext]'
-      }
+        test: /\.woff2$/,
+        loader: 'file-loader?name=fonts/[name].[ext]',
+      },
+      { test: /\.(woff|eot|ttf|otf|svg)$/, use: ['raw-loader', 'ignore-loader'] },
     ],
   },
   plugins: [
     new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
@@ -68,7 +71,7 @@ const config = {
       {
         from: 'manifest.json',
         to: 'manifest.json',
-        transform: (content) => {
+        transform: content => {
           const jsonContent = JSON.parse(content);
           jsonContent.version = version;
 
@@ -97,9 +100,7 @@ if (config.mode === 'production') {
 }
 
 if (process.env.HMR === 'true') {
-  config.plugins = (config.plugins || []).concat([
-    new ChromeExtensionReloader(),
-  ]);
+  config.plugins = (config.plugins || []).concat([new ChromeExtensionReloader()]);
 }
 
 function transformHtml(content) {
