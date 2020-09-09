@@ -52,7 +52,7 @@
     "file-loader": "^6.0.0",
     "husky": "^4.0.7",
     "ignore-loader": "^0.1.2",
-    "mini-css-extract-plugin": "^0.10.0",
+    "mini-css-extract-plugin": "^0.11.1",
     "prettier": "^2.0.2",
     "pretty-quick": "^3.0.0",
     "raw-loader": "^4.0.0",
