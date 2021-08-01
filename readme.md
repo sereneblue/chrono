@@ -1,6 +1,6 @@
 # chrono
 
-![chrono version](https://img.shields.io/badge/version-1.1.1-brightgreen.svg)
+![chrono version](https://img.shields.io/badge/version-1.1.2-brightgreen.svg)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Enhance Firefox's history capabilities with browsing history stats, improved searching and additional features. More details can be found [here](https://sereneblue.github.io/chrono).

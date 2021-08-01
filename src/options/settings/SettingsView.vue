@@ -20,7 +20,7 @@
     </v-select>
     <v-switch v-model="darkModeEnabled" :color="themeColor" :label="`Dark Mode ${darkModeEnabled ? 'Enabled' : 'Disabled'}`"></v-switch>
     <div class="headline mb-2">chrono can be opened by pressing CTRL + ALT + H</div>
-    <div class="title font-weight-medium">v1.1.1 by sereneblue</div>
+    <div class="title font-weight-medium">v1.1.2 by sereneblue</div>
     <v-btn href="https://github.com/sereneblue/chrono" target="_blank">View source code</v-btn>
   </v-container>
 </template>

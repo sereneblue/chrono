@@ -43,7 +43,15 @@ const config = {
       },
       {
         test: /\.sass$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                indentedSyntax: true,
+              }
+            },
+          }],
       },
       {
         test: /\.(png|jpg|gif|svg|ico)$/,
@@ -65,24 +73,26 @@ const config = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
-    new CopyWebpackPlugin([
-      { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
-      { from: 'options/options.html', to: 'dashboard.html', transform: transformHtml },
-      {
-        from: 'manifest.json',
-        to: 'manifest.json',
-        transform: content => {
-          const jsonContent = JSON.parse(content);
-          jsonContent.version = version;
+    new CopyWebpackPlugin({
+      patterns: [  
+        { from: 'icons', to: 'icons',  globOptions: { ignore: ['icon.xcf'] }},
+        { from: 'options/options.html', to: 'dashboard.html', transform: transformHtml },
+        {
+          from: 'manifest.json',
+          to: 'manifest.json',
+          transform: content => {
+            const jsonContent = JSON.parse(content);
+            jsonContent.version = version;
 
-          if (config.mode === 'development') {
-            jsonContent['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
-          }
+            if (config.mode === 'development') {
+              jsonContent['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+            }
 
-          return JSON.stringify(jsonContent, null, 2);
+            return JSON.stringify(jsonContent, null, 2);
+          },
         },
-      },
-    ]),
+      ]
+    }),
     new WebpackShellPlugin({
       onBuildEnd: ['node scripts/remove-evals.js'],
     }),
