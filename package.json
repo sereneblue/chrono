@@ -58,7 +58,7 @@
     "pretty-quick": "^3.0.0",
     "raw-loader": "^4.0.0",
     "sass": "^1.37.0",
-    "sass-loader": "^9.0.0",
+    "sass-loader": "^12.1.0",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^5.54.0",
