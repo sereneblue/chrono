@@ -37,7 +37,7 @@
     "copy-webpack-plugin": "^6.4.1",
     "core-js": "^3.2.1",
     "cross-env": "^7.0.0",
-    "css-loader": "^5.0.1",
+    "css-loader": "^6.4.0",
     "ejs": "^3.0.1",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^8.1.0",
