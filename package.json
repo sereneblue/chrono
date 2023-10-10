@@ -31,7 +31,7 @@
     "@babel/preset-env": "^7.1.0",
     "@mdi/font": "^7.0.96",
     "@types/chrome": "^0.0.231",
-    "archiver": "^5.0.0",
+    "archiver": "^6.0.1",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^9.0.0",
     "copy-webpack-plugin": "^11.0.0",
