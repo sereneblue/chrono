@@ -21,7 +21,7 @@
     "typeface-roboto": "1.1.13",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
-    "vuetify": "^2.5.8",
+    "vuetify": "^3.3.23",
     "vuetify-loader": "^1.7.2",
     "vuex": "^4.0.2"
   },
