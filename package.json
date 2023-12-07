@@ -30,7 +30,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@mdi/font": "^7.0.96",
-    "@types/chrome": "^0.0.231",
+    "@types/chrome": "^0.0.254",
     "archiver": "^5.0.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^9.0.0",
